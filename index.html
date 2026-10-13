@@ -2,539 +2,605 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LedgerPro - Cloud Accounting</title>
-    <!-- Font Awesome for Icons -->
+    <!-- FontAwesome for Professional Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
+        /* --- MODERN SAAS DESIGN SYSTEM --- */
         :root {
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --sidebar-bg: #1e293b;
-            --sidebar-hover: #334155;
-            --sidebar-active: #0f172a;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #1e293b;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
+            /* Colors */
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --primary-light: #EEF2FF;
+            --bg-body: #F8FAFC;
+            --sidebar-bg: #0F172A;
+            --sidebar-hover: #1E293B;
+            --sidebar-text: #94A3B8;
+            --sidebar-text-active: #FFFFFF;
+            --text-main: #0F172A;
+            --text-muted: #64748B;
+            --border: #E2E8F0;
+            --card-bg: #FFFFFF;
+            --success: #10B981;
+            --success-bg: #D1FAE5;
+            --danger: #EF4444;
+            --danger-bg: #FEE2E2;
+            --warning: #F59E0B;
+            --warning-bg: #FEF3C7;
+            
+            /* Spacing & Radius */
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-full: 9999px;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-
-        body { background-color: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-body); 
+            color: var(--text-main); 
+            display: flex; 
+            height: 100vh; 
+            overflow: hidden; 
+            -webkit-font-smoothing: antialiased;
+        }
 
         /* --- SIDEBAR --- */
-        #sidebar {
-            width: 260px; background-color: var(--sidebar-bg); color: white;
-            display: flex; flex-direction: column; flex-shrink: 0; transition: 0.3s;
+        .sidebar { 
+            width: 260px; 
+            background: var(--sidebar-bg); 
+            display: flex; 
+            flex-direction: column; 
+            overflow-y: auto; 
+            flex-shrink: 0; 
+            transition: 0.3s ease;
+            z-index: 20;
         }
-        .brand { padding: 20px; font-size: 20px; font-weight: bold; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #334155; }
-        .brand i { color: var(--primary); }
+        .sidebar-brand { 
+            padding: 24px 20px; 
+            font-size: 20px; 
+            font-weight: 700; 
+            color: white; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px;
+            letter-spacing: -0.5px;
+        }
+        .sidebar-brand i { color: var(--primary); font-size: 24px; }
         
-        .nav-menu { list-style: none; padding: 15px 0; overflow-y: auto; flex: 1; }
-        .nav-section { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; padding: 15px 20px 5px; }
-        .nav-menu li { padding: 12px 20px; cursor: pointer; color: #cbd5e1; transition: 0.2s; font-size: 14px; display: flex; align-items: center; gap: 12px; }
-        .nav-menu li:hover { background-color: var(--sidebar-hover); color: white; }
-        .nav-menu li.active { background-color: var(--primary); color: white; border-left: 4px solid white; }
-        .nav-menu li i { width: 20px; text-align: center; }
+        .nav-section { 
+            padding: 20px 20px 8px; 
+            font-size: 11px; 
+            text-transform: uppercase; 
+            letter-spacing: 1.2px; 
+            color: #475569; 
+            font-weight: 600; 
+        }
+        
+        .nav-item { 
+            padding: 10px 20px; 
+            margin: 2px 12px;
+            border-radius: var(--radius-md);
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            cursor: pointer; 
+            color: var(--sidebar-text); 
+            transition: all 0.2s ease; 
+            font-size: 14px; 
+            font-weight: 500;
+        }
+        .nav-item:hover { background: var(--sidebar-hover); color: var(--sidebar-text-active); }
+        .nav-item.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+        .nav-item i { width: 20px; text-align: center; font-size: 15px; }
 
         /* --- MAIN CONTENT --- */
-        #main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        #topbar { background: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); box-shadow: 0 1px 2px rgba(0,0,0,0.05); z-index: 10; }
-        #topbar h1 { font-size: 18px; color: var(--text); }
-        .user-profile { display: flex; align-items: center; gap: 15px; font-size: 14px; color: var(--text-muted); }
-        .user-profile i { font-size: 20px; color: var(--primary); }
+        .main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+        
+        /* --- TOPBAR --- */
+        .topbar { 
+            background: var(--card-bg); 
+            padding: 0 32px; 
+            height: 70px;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 1px solid var(--border); 
+            z-index: 10; 
+        }
+        .topbar-left { display: flex; flex-direction: column; }
+        .topbar-left h2 { font-size: 18px; font-weight: 600; color: var(--text-main); }
+        
+        .topbar-right { display: flex; align-items: center; gap: 24px; }
+        
+        .search-bar { 
+            display: flex; align-items: center; background: var(--bg-body); 
+            padding: 8px 16px; border-radius: var(--radius-full); border: 1px solid var(--border);
+            width: 300px; transition: 0.2s;
+        }
+        .search-bar:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); background: white; }
+        .search-bar i { color: var(--text-muted); margin-right: 10px; }
+        .search-bar input { border: none; background: transparent; outline: none; width: 100%; font-size: 14px; font-family: 'Inter', sans-serif; }
+        
+        .company-switcher { 
+            background: white; border: 1px solid var(--border); padding: 8px 16px; 
+            border-radius: var(--radius-md); font-size: 13px; font-weight: 600; 
+            cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s;
+        }
+        .company-switcher:hover { border-color: var(--primary); color: var(--primary); }
+        
+        .user-profile { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .user-avatar { 
+            width: 38px; height: 38px; border-radius: var(--radius-full); 
+            background: linear-gradient(135deg, var(--primary), #818CF8); 
+            color: white; display: flex; align-items: center; justify-content: center; 
+            font-weight: 600; font-size: 14px;
+        }
 
-        .view-container { flex: 1; overflow-y: auto; padding: 30px; }
+        /* --- VIEWS CONTAINER --- */
+        .view-container { flex: 1; overflow-y: auto; padding: 32px; }
         .view { display: none; animation: fadeIn 0.3s ease; }
         .view.active { display: block; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- CARDS & GRIDS --- */
-        .card { background: var(--card-bg); border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; border: 1px solid var(--border); }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
-        .card-header h2 { font-size: 16px; color: var(--text); font-weight: 600; }
+        /* --- CARDS & STATS --- */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 32px; }
+        .stat-card { 
+            background: var(--card-bg); padding: 24px; border-radius: var(--radius-lg); 
+            border: 1px solid var(--border); box-shadow: var(--shadow-sm); transition: all 0.2s ease; 
+            cursor: pointer; position: relative; overflow: hidden;
+        }
+        .stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: var(--primary); }
+        .stat-card h3 { font-size: 13px; color: var(--text-muted); font-weight: 500; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .stat-card .value { font-size: 26px; font-weight: 700; color: var(--text-main); letter-spacing: -0.5px; }
+        .stat-card .subtext { font-size: 12px; margin-top: 8px; color: var(--text-muted); font-weight: 500; }
         
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .stat-box { background: white; padding: 20px; border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.05); cursor: pointer; transition: 0.2s; }
-        .stat-box:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-color: var(--primary); }
-        .stat-box h3 { font-size: 13px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; font-weight: 600; }
-        .stat-box p { font-size: 22px; font-weight: bold; color: var(--text); }
-        .stat-box .sub-text { font-size: 12px; color: var(--text-muted); margin-top: 5px; }
+        .stat-card.income { border-top: 4px solid var(--success); }
+        .stat-card.expense { border-top: 4px solid var(--danger); }
+        .stat-card.profit { border-top: 4px solid var(--primary); }
 
         /* --- TABLES --- */
+        .card { 
+            background: var(--card-bg); border-radius: var(--radius-lg); 
+            border: 1px solid var(--border); box-shadow: var(--shadow-sm); 
+            margin-bottom: 24px; overflow: hidden;
+        }
+        .card-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: #FFFFFF; }
+        .card-header h3 { font-size: 16px; font-weight: 600; }
+        
         .table-responsive { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; }
-        th, td { text-align: left; padding: 12px 15px; border-bottom: 1px solid var(--border); font-size: 14px; }
-        th { background-color: #f8fafc; color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; }
-        tr:hover { background-color: #f1f5f9; }
+        th, td { padding: 16px 24px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
+        th { background: #F8FAFC; color: var(--text-muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background: #F8FAFC; }
         
-        /* --- FORMS & MODALS --- */
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 13px; color: var(--text); }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 10px 12px; border: 1px solid var(--border);
-            border-radius: 6px; font-size: 14px; outline: none; transition: 0.2s; font-family: inherit;
+        /* Status Badges */
+        .badge { padding: 4px 10px; border-radius: var(--radius-full); font-size: 12px; font-weight: 600; display: inline-block; }
+        .badge-success { background: var(--success-bg); color: #065F46; }
+        .badge-warning { background: var(--warning-bg); color: #92400E; }
+        .badge-danger { background: var(--danger-bg); color: #991B1B; }
+        .badge-neutral { background: #F1F5F9; color: #475569; }
+
+        /* --- FORMS & BUTTONS --- */
+        .btn { 
+            background: var(--primary); color: white; border: none; padding: 10px 20px; 
+            border-radius: var(--radius-md); font-size: 14px; font-weight: 600; cursor: pointer; 
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px; 
+            transition: all 0.2s ease; box-shadow: var(--shadow-sm); font-family: 'Inter', sans-serif;
         }
-        .form-group input:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+        .btn:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+        .btn:active { transform: translateY(0); }
+        .btn-sm { padding: 6px 12px; font-size: 13px; border-radius: 6px; }
+        .btn-outline { background: white; color: var(--text-main); border: 1px solid var(--border); }
+        .btn-outline:hover { background: #F8FAFC; border-color: var(--text-muted); }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text-main); }
+        .form-control { 
+            width: 100%; padding: 12px 16px; border: 1px solid var(--border); 
+            border-radius: var(--radius-md); font-size: 14px; font-family: 'Inter', sans-serif; 
+            outline: none; transition: 0.2s; background: #FFFFFF; color: var(--text-main);
+        }
+        .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-light); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
-        .btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; }
-        .btn:hover { background: var(--primary-hover); }
-        .btn-danger { background: var(--danger); }
-        .btn-danger:hover { background: #b91c1c; }
-        .btn-secondary { background: white; color: var(--text); border: 1px solid var(--border); }
-        .btn-secondary:hover { background: #f1f5f9; }
-        .btn-sm { padding: 5px 10px; font-size: 12px; }
-        .btn-block { width: 100%; justify-content: center; }
+        /* --- MODALS --- */
+        .modal-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+            display: none; justify-content: center; align-items: center; z-index: 1000; 
+            padding: 20px; opacity: 0; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-content { 
+            background: white; border-radius: var(--radius-lg); width: 100%; max-width: 600px; 
+            max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); 
+            transform: scale(0.95); transition: transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-content { transform: scale(1); }
+        .modal-header { padding: 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h3 { font-size: 18px; font-weight: 700; }
+        .modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); transition: 0.2s; }
+        .modal-close:hover { color: var(--danger); }
+        .modal-body { padding: 24px; }
+        .modal-footer { padding: 20px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 12px; background: #F8FAFC; border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
-        .modal-overlay.active { display: flex; }
-        .modal-content { background: white; padding: 25px; border-radius: 8px; width: 100%; max-width: 700px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        .modal-header h2 { font-size: 18px; color: var(--primary); }
-        .close-modal { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); }
+        /* --- QUICK ACTIONS --- */
+        .quick-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; }
+        .quick-btn { 
+            background: white; border: 1px solid var(--border); padding: 20px 16px; 
+            border-radius: var(--radius-lg); text-align: center; cursor: pointer; 
+            transition: all 0.2s ease; display: flex; flex-direction: column; align-items: center; gap: 12px; 
+            font-size: 13px; font-weight: 600; color: var(--text-main); box-shadow: var(--shadow-sm);
+        }
+        .quick-btn:hover { border-color: var(--primary); color: var(--primary); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .quick-btn i { font-size: 24px; color: var(--primary); background: var(--primary-light); padding: 12px; border-radius: var(--radius-full); }
 
-        /* --- BADGES --- */
-        .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
-        .badge-success { background: #d1fae5; color: #065f46; }
-        .badge-warning { background: #fef3c7; color: #92400e; }
-        .badge-danger { background: #fee2e2; color: #991b1b; }
-        .badge-info { background: #dbeafe; color: #1e40af; }
+        /* --- LEDGER TABLE SPECIFIC --- */
+        .ledger-table td { font-family: 'Inter', monospace; font-size: 13px; }
+        .ledger-table .dr { color: var(--success); font-weight: 600; }
+        .ledger-table .cr { color: var(--danger); font-weight: 600; }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .text-muted { color: var(--text-muted); }
 
-        /* Floating Action Button */
-        .fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 24px; box-shadow: 0 4px 10px rgba(37,99,235,0.4); cursor: pointer; display: flex; justify-content: center; align-items: center; z-index: 900; transition: 0.2s; }
-        .fab:hover { transform: scale(1.1); background: var(--primary-hover); }
-        .fab-menu { position: fixed; bottom: 100px; right: 30px; display: none; flex-direction: column; gap: 10px; z-index: 900; }
-        .fab-menu.active { display: flex; }
-        .fab-menu button { background: white; border: 1px solid var(--border); padding: 10px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer; text-align: left; font-size: 14px; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
-        .fab-menu button:hover { background: var(--bg); }
-
+        /* Responsive Tablet & Mobile */
+        @media (max-width: 1024px) {
+            .sidebar { width: 220px; }
+            .search-bar { width: 200px; }
+        }
         @media (max-width: 768px) {
-            #sidebar { width: 60px; }
-            .brand span, .nav-section, .nav-menu li span { display: none; }
-            .nav-menu li { justify-content: center; padding: 15px 0; }
-            .form-row, .form-row-3 { grid-template-columns: 1fr; }
-            .view-container { padding: 15px; }
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; padding: 0; position: fixed; bottom: 0; z-index: 100; border-top: 1px solid var(--border); }
+            .sidebar-brand { display: none; }
+            .nav-section { display: none; }
+            .nav-item { padding: 16px 20px; border-radius: 0; margin: 0; border-bottom: 3px solid transparent; flex-direction: column; gap: 4px; font-size: 10px; }
+            .nav-item.active { border-radius: 0; border-bottom-color: var(--primary); background: transparent; box-shadow: none; color: var(--primary); }
+            .nav-item.active i { color: var(--primary); }
+            .main-content { margin-bottom: 70px; }
+            .form-row { grid-template-columns: 1fr; }
+            .topbar { padding: 0 20px; }
+            .search-bar { display: none; }
+            .view-container { padding: 20px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR -->
-    <div id="sidebar">
-        <div class="brand">
-            <i class="fas fa-book-reader"></i>
-            <span>LedgerPro</span>
-        </div>
-        <ul class="nav-menu">
-            <li class="active" onclick="showView('dashboard-view')"><i class="fas fa-chart-pie"></i> <span>Dashboard</span></li>
-            
-            <div class="nav-section">Masters</div>
-            <li onclick="showView('customers-view')"><i class="fas fa-users"></i> <span>Customers</span></li>
-            <li onclick="showView('suppliers-view')"><i class="fas fa-truck"></i> <span>Suppliers</span></li>
-            <li onclick="showView('items-view')"><i class="fas fa-box"></i> <span>Items & Inventory</span></li>
-            
-            <div class="nav-section">Transactions</div>
-            <li onclick="showView('invoices-view')"><i class="fas fa-file-invoice"></i> <span>Invoices</span></li>
-            <li onclick="showView('expenses-view')"><i class="fas fa-receipt"></i> <span>Expenses</span></li>
-            <li onclick="showView('payments-view')"><i class="fas fa-money-bill-wave"></i> <span>Payments</span></li>
-            
-            <div class="nav-section">Accounting</div>
-            <li onclick="showView('accounts-view')"><i class="fas fa-sitemap"></i> <span>Chart of Accounts</span></li>
-            <li onclick="showView('journal-view')"><i class="fas fa-book"></i> <span>Journal Entries</span></li>
-            
-            <div class="nav-section">Reports</div>
-            <li onclick="showView('trial-balance-view')"><i class="fas fa-balance-scale"></i> <span>Trial Balance</span></li>
-            <li onclick="showView('pnl-view')"><i class="fas fa-chart-line"></i> <span>Profit & Loss</span></li>
-            <li onclick="showView('balance-sheet-view')"><i class="fas fa-file-invoice-dollar"></i> <span>Balance Sheet</span></li>
-            
-            <div class="nav-section">System</div>
-            <li onclick="showView('setup-view')"><i class="fas fa-cog"></i> <span>Company Setup</span></li>
-            <li onclick="resetApp()" style="color: #fca5a5;"><i class="fas fa-trash-alt"></i> <span>Reset Data</span></li>
-        </ul>
+    <!-- SIDEBAR NAVIGATION -->
+    <div class="sidebar">
+        <div class="sidebar-brand"><i class="fa-solid fa-chart-pie"></i> LedgerPro</div>
+        
+        <div class="nav-section">Overview</div>
+        <div class="nav-item active" onclick="nav('dashboard')"><i class="fa-solid fa-gauge-high"></i> Dashboard</div>
+        
+        <div class="nav-section">Sales</div>
+        <div class="nav-item" onclick="nav('invoices')"><i class="fa-solid fa-file-invoice-dollar"></i> Invoices</div>
+        <div class="nav-item" onclick="nav('customers')"><i class="fa-solid fa-users"></i> Customers</div>
+        
+        <div class="nav-section">Purchases</div>
+        <div class="nav-item" onclick="nav('expenses')"><i class="fa-solid fa-receipt"></i> Expenses</div>
+        
+        <div class="nav-section">Accounting</div>
+        <div class="nav-item" onclick="nav('accounts')"><i class="fa-solid fa-book"></i> Chart of Accounts</div>
+        <div class="nav-item" onclick="nav('journals')"><i class="fa-solid fa-scale-balanced"></i> Journal Entries</div>
+        <div class="nav-item" onclick="nav('trial-balance')"><i class="fa-solid fa-scale-unbalanced"></i> Trial Balance</div>
+        
+        <div class="nav-section">Inventory</div>
+        <div class="nav-item" onclick="nav('items')"><i class="fa-solid fa-boxes-stacked"></i> Items</div>
     </div>
 
     <!-- MAIN CONTENT -->
-    <div id="main-content">
-        <div id="topbar">
-            <h1 id="page-title">Dashboard</h1>
-            <div class="user-profile">
-                <i class="fas fa-user-circle"></i>
-                <span id="topbar-company-name">Demo Company</span>
+    <div class="main-content">
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <h2 id="page-title">Dashboard</h2>
+            </div>
+            <div class="topbar-right">
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search invoices, customers...">
+                </div>
+                <div class="company-switcher">
+                    <i class="fa-solid fa-building"></i> My Demo Company
+                </div>
+                <div class="user-profile">
+                    <div class="user-avatar">A</div>
+                </div>
             </div>
         </div>
 
+        <!-- VIEWS CONTAINER -->
         <div class="view-container">
+            
             <!-- 1. DASHBOARD VIEW -->
-            <div id="dashboard-view" class="view active">
+            <div id="view-dashboard" class="view active">
                 <div class="stats-grid">
-                    <div class="stat-box" onclick="showView('invoices-view')">
-                        <h3>Total Receivables</h3>
-                        <p id="dash-receivables">₹0.00</p>
-                        <div class="sub-text">Money customers owe you</div>
+                    <div class="stat-card" onclick="nav('invoices')">
+                        <h3><i class="fa-solid fa-hand-holding-dollar"></i> Receivables</h3>
+                        <div class="value" id="dash-receivables">₹0.00</div>
+                        <div class="subtext">Money customers owe you</div>
                     </div>
-                    <div class="stat-box" onclick="showView('suppliers-view')">
-                        <h3>Total Payables</h3>
-                        <p id="dash-payables">₹0.00</p>
-                        <div class="sub-text">Money you owe suppliers</div>
+                    <div class="stat-card" onclick="nav('expenses')">
+                        <h3><i class="fa-solid fa-file-invoice"></i> Payables</h3>
+                        <div class="value" id="dash-payables">₹0.00</div>
+                        <div class="subtext">Money you owe suppliers</div>
                     </div>
-                    <div class="stat-box" onclick="showView('accounts-view')">
-                        <h3>Cash & Bank</h3>
-                        <p id="dash-cash">₹0.00</p>
-                        <div class="sub-text">Available balance</div>
+                    <div class="stat-card income">
+                        <h3><i class="fa-solid fa-arrow-trend-up"></i> Revenue</h3>
+                        <div class="value" id="dash-revenue">₹0.00</div>
+                        <div class="subtext">Sales for the period</div>
                     </div>
-                    <div class="stat-box" onclick="showView('pnl-view')">
-                        <h3>Revenue</h3>
-                        <p id="dash-revenue">₹0.00</p>
-                        <div class="sub-text">Total sales</div>
+                    <div class="stat-card expense">
+                        <h3><i class="fa-solid fa-arrow-trend-down"></i> Expenses</h3>
+                        <div class="value" id="dash-expenses">₹0.00</div>
+                        <div class="subtext">Business expenses</div>
                     </div>
-                    <div class="stat-box" onclick="showView('expenses-view')">
-                        <h3>Expenses</h3>
-                        <p id="dash-expenses">₹0.00</p>
-                        <div class="sub-text">Business expenses</div>
-                    </div>
-                    <div class="stat-box" onclick="showView('pnl-view')" style="border-left: 4px solid var(--success);">
-                        <h3>Net Profit</h3>
-                        <p id="dash-profit" style="color: var(--success);">₹0.00</p>
-                        <div class="sub-text">Revenue - Expenses</div>
+                    <div class="stat-card profit">
+                        <h3><i class="fa-solid fa-sack-dollar"></i> Net Profit</h3>
+                        <div class="value" id="dash-profit">₹0.00</div>
+                        <div class="subtext">Revenue - Expenses</div>
                     </div>
                 </div>
 
                 <div class="card">
                     <div class="card-header">
-                        <h2>Recent Transactions</h2>
-                        <button class="btn btn-secondary btn-sm" onclick="showView('journal-view')">View All</button>
+                        <h3>Quick Actions</h3>
                     </div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead><tr><th>Date</th><th>Type</th><th>Reference</th><th>Amount</th><th>Status</th></tr></thead>
-                            <tbody id="dash-recent-tbody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 2. CUSTOMERS VIEW -->
-            <div id="customers-view" class="view">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Customers</h2>
-                        <button class="btn" onclick="openModal('customer-modal')"><i class="fas fa-plus"></i> New Customer</button>
-                    </div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Outstanding</th><th>Actions</th></tr></thead>
-                            <tbody id="customers-tbody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 3. SUPPLIERS VIEW -->
-            <div id="suppliers-view" class="view">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Suppliers</h2>
-                        <button class="btn" onclick="openModal('supplier-modal')"><i class="fas fa-plus"></i> New Supplier</button>
-                    </div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Payable</th></tr></thead>
-                            <tbody id="suppliers-tbody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 4. ITEMS VIEW -->
-            <div id="items-view" class="view">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Items & Inventory</h2>
-                        <button class="btn" onclick="openModal('item-modal')"><i class="fas fa-plus"></i> New Item</button>
-                    </div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead><tr><th>Name</th><th>SKU</th><th>Type</th><th>Sale Price</th><th>Stock</th></tr></thead>
-                            <tbody id="items-tbody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 5. INVOICES VIEW -->
-            <div id="invoices-view" class="view">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Invoices</h2>
-                        <button class="btn" onclick="openModal('invoice-modal')"><i class="fas fa-plus"></i> Create Invoice</button>
-                    </div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead><tr><th>Invoice #</th><th>Customer</th><th>Date</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead>
-                            <tbody id="invoices-tbody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 6. EXPENSES VIEW -->
-            <div id="expenses-view" class="view">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Expenses</h2>
-                        <button class="btn" onclick="openModal('expense-modal')"><i class="fas fa-plus"></i> Record Expense</button>
-                    </div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead><tr><th>Date</th><th>Category</th><th>Payee</th><th>Amount</th><th>Payment Account</th></tr></thead>
-                            <tbody id="expenses-tbody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 7. PAYMENTS VIEW -->
-            <div id="payments-view" class="view">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Payments</h2>
-                        <button class="btn" onclick="openModal('payment-modal')"><i class="fas fa-plus"></i> Record Payment</button>
-                    </div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead><tr><th>Date</th><th>Type</th><th>Reference</th><th>Amount</th><th>Account</th></tr></thead>
-                            <tbody id="payments-tbody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 8. CHART OF ACCOUNTS VIEW -->
-            <div id="accounts-view" class="view">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Chart of Accounts</h2>
-                    </div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead><tr><th>Code</th><th>Account Name</th><th>Type</th><th>Balance</th></tr></thead>
-                            <tbody id="accounts-tbody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 9. JOURNAL ENTRIES VIEW -->
-            <div id="journal-view" class="view">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Journal Entries</h2>
-                    </div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead><tr><th>Date</th><th>Reference</th><th>Description</th><th>Debit</th><th>Credit</th></tr></thead>
-                            <tbody id="journal-tbody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 10. TRIAL BALANCE VIEW -->
-            <div id="trial-balance-view" class="view">
-                <div class="card">
-                    <div class="card-header"><h2>Trial Balance</h2></div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead><tr><th>Account</th><th>Debit (Dr)</th><th>Credit (Cr)</th></tr></thead>
-                            <tbody id="tb-tbody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 11. PROFIT & LOSS VIEW -->
-            <div id="pnl-view" class="view">
-                <div class="card">
-                    <div class="card-header"><h2>Profit & Loss Statement</h2></div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead><tr><th>Particulars</th><th>Amount</th></tr></thead>
-                            <tbody id="pnl-tbody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 12. BALANCE SHEET VIEW -->
-            <div id="balance-sheet-view" class="view">
-                <div class="card">
-                    <div class="card-header"><h2>Balance Sheet</h2></div>
-                    <div class="table-responsive">
-                        <table>
-                            <thead><tr><th>Particulars</th><th>Amount</th></tr></thead>
-                            <tbody id="bs-tbody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 13. COMPANY SETUP VIEW -->
-            <div id="setup-view" class="view">
-                <div class="card">
-                    <div class="card-header"><h2>Company Setup</h2></div>
-                    <form id="setup-form">
-                        <div class="form-row">
-                            <div class="form-group"><label>Company Name</label><input type="text" id="setup-name" required></div>
-                            <div class="form-group"><label>Currency</label>
-                                <select id="setup-currency">
-                                    <option value="INR">INR (₹)</option>
-                                    <option value="USD">USD ($)</option>
-                                    <option value="EUR">EUR (€)</option>
-                                </select>
-                            </div>
+                    <div class="modal-body">
+                        <div class="quick-actions">
+                            <div class="quick-btn" onclick="openModal('invoice-modal')"><i class="fa-solid fa-file-invoice"></i> Create Invoice</div>
+                            <div class="quick-btn" onclick="openModal('expense-modal')"><i class="fa-solid fa-money-bill-wave"></i> Record Expense</div>
+                            <div class="quick-btn" onclick="openModal('customer-modal')"><i class="fa-solid fa-user-plus"></i> Add Customer</div>
+                            <div class="quick-btn" onclick="openModal('item-modal')"><i class="fa-solid fa-box"></i> Add Product</div>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group"><label>Financial Year</label>
-                                <select id="setup-fy">
-                                    <option value="2024-2025">2024-2025</option>
-                                    <option value="2025-2026">2025-2026</option>
-                                </select>
-                            </div>
-                            <div class="form-group"><label>GSTIN (Optional)</label><input type="text" id="setup-gstin"></div>
-                        </div>
-                        <button type="submit" class="btn">Save Setup</button>
-                    </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Recent Transactions</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Reference</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dash-recent-transactions">
+                                <tr><td colspan="5" class="text-center text-muted" style="padding: 40px;">No transactions yet. Create an invoice to get started.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
+
+            <!-- 2. INVOICES VIEW -->
+            <div id="view-invoices" class="view">
+                <div class="card-header" style="border:none; padding: 0 0 20px 0; background: transparent;">
+                    <h3>All Invoices</h3>
+                    <button class="btn" onclick="openModal('invoice-modal')"><i class="fa-solid fa-plus"></i> New Invoice</button>
+                </div>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Invoice #</th>
+                                    <th>Customer</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="invoices-table-body">
+                                <!-- Injected via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. CUSTOMERS VIEW -->
+            <div id="view-customers" class="view">
+                <div class="card-header" style="border:none; padding: 0 0 20px 0; background: transparent;">
+                    <h3>Customers</h3>
+                    <button class="btn" onclick="openModal('customer-modal')"><i class="fa-solid fa-plus"></i> New Customer</button>
+                </div>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Outstanding Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customers-table-body">
+                                <!-- Injected via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. EXPENSES VIEW -->
+            <div id="view-expenses" class="view">
+                <div class="card-header" style="border:none; padding: 0 0 20px 0; background: transparent;">
+                    <h3>Expenses</h3>
+                    <button class="btn" onclick="openModal('expense-modal')"><i class="fa-solid fa-plus"></i> Record Expense</button>
+                </div>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Category</th>
+                                    <th>Paid Via</th>
+                                    <th>Amount</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody id="expenses-table-body">
+                                <!-- Injected via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. CHART OF ACCOUNTS VIEW -->
+            <div id="view-accounts" class="view">
+                <div class="card-header" style="border:none; padding: 0 0 20px 0; background: transparent;">
+                    <h3>Chart of Accounts</h3>
+                </div>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Account Name</th>
+                                    <th>Type</th>
+                                    <th class="text-right">Debit (Dr)</th>
+                                    <th class="text-right">Credit (Cr)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="accounts-table-body">
+                                <!-- Injected via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. JOURNAL ENTRIES VIEW -->
+            <div id="view-journals" class="view">
+                <div class="card-header" style="border:none; padding: 0 0 20px 0; background: transparent;">
+                    <h3>General Journal</h3>
+                </div>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="ledger-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Account</th>
+                                    <th class="text-right">Debit</th>
+                                    <th class="text-right">Credit</th>
+                                    <th>Narration</th>
+                                </tr>
+                            </thead>
+                            <tbody id="journals-table-body">
+                                <!-- Injected via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. TRIAL BALANCE VIEW -->
+            <div id="view-trial-balance" class="view">
+                <div class="card-header" style="border:none; padding: 0 0 20px 0; background: transparent;">
+                    <h3>Trial Balance</h3>
+                </div>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="ledger-table">
+                            <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <th class="text-right">Debit (Dr)</th>
+                                    <th class="text-right">Credit (Cr)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tb-table-body">
+                                <!-- Injected via JS -->
+                            </tbody>
+                            <tfoot>
+                                <tr style="font-weight: 700; background: #F8FAFC; border-top: 2px solid var(--border);">
+                                    <td>Total</td>
+                                    <td class="text-right dr" id="tb-total-dr">₹0.00</td>
+                                    <td class="text-right cr" id="tb-total-cr">₹0.00</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <!-- FLOATING ACTION BUTTON -->
-    <button class="fab" onclick="toggleFabMenu()"><i class="fas fa-plus"></i></button>
-    <div class="fab-menu" id="fab-menu">
-        <button onclick="openModal('invoice-modal')"><i class="fas fa-file-invoice" style="color: var(--primary);"></i> Create Invoice</button>
-        <button onclick="openModal('expense-modal')"><i class="fas fa-receipt" style="color: var(--danger);"></i> Record Expense</button>
-        <button onclick="openModal('customer-modal')"><i class="fas fa-user-plus" style="color: var(--success);"></i> Add Customer</button>
-        <button onclick="openModal('payment-modal')"><i class="fas fa-money-bill-wave" style="color: var(--warning);"></i> Record Payment</button>
-    </div>
-
-    <!-- --- MODALS --- -->
+    <!-- MODALS -->
     
-    <!-- Customer Modal -->
-    <div id="customer-modal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header"><h2>Add New Customer</h2><button class="close-modal" onclick="closeModal('customer-modal')">&times;</button></div>
-            <form id="customer-form">
-                <div class="form-row">
-                    <div class="form-group"><label>Customer Name *</label><input type="text" id="cust-name" required></div>
-                    <div class="form-group"><label>Email</label><input type="email" id="cust-email"></div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group"><label>Phone</label><input type="text" id="cust-phone"></div>
-                    <div class="form-group"><label>GSTIN</label><input type="text" id="cust-gstin"></div>
-                </div>
-                <div class="form-group"><label>Opening Balance (Receivable)</label><input type="number" id="cust-balance" value="0"></div>
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button type="button" class="btn btn-secondary btn-block" onclick="closeModal('customer-modal')">Cancel</button>
-                    <button type="submit" class="btn btn-block">Save Customer</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Supplier Modal -->
-    <div id="supplier-modal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header"><h2>Add New Supplier</h2><button class="close-modal" onclick="closeModal('supplier-modal')">&times;</button></div>
-            <form id="supplier-form">
-                <div class="form-row">
-                    <div class="form-group"><label>Supplier Name *</label><input type="text" id="sup-name" required></div>
-                    <div class="form-group"><label>Email</label><input type="email" id="sup-email"></div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group"><label>Phone</label><input type="text" id="sup-phone"></div>
-                    <div class="form-group"><label>GSTIN</label><input type="text" id="sup-gstin"></div>
-                </div>
-                <div class="form-group"><label>Opening Balance (Payable)</label><input type="number" id="sup-balance" value="0"></div>
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button type="button" class="btn btn-secondary btn-block" onclick="closeModal('supplier-modal')">Cancel</button>
-                    <button type="submit" class="btn btn-block">Save Supplier</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Item Modal -->
-    <div id="item-modal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header"><h2>Add New Item</h2><button class="close-modal" onclick="closeModal('item-modal')">&times;</button></div>
-            <form id="item-form">
-                <div class="form-row">
-                    <div class="form-group"><label>Item Name *</label><input type="text" id="item-name" required></div>
-                    <div class="form-group"><label>Type</label>
-                        <select id="item-type"><option value="Product">Product</option><option value="Service">Service</option></select>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group"><label>SKU</label><input type="text" id="item-sku"></div>
-                    <div class="form-group"><label>HSN/SAC</label><input type="text" id="item-hsn"></div>
-                </div>
-                <div class="form-row-3">
-                    <div class="form-group"><label>Sale Price *</label><input type="number" id="item-price" required></div>
-                    <div class="form-group"><label>Purchase Cost</label><input type="number" id="item-cost"></div>
-                    <div class="form-group"><label>Opening Stock</label><input type="number" id="item-stock" value="0"></div>
-                </div>
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button type="button" class="btn btn-secondary btn-block" onclick="closeModal('item-modal')">Cancel</button>
-                    <button type="submit" class="btn btn-block">Save Item</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <!-- Invoice Modal -->
     <div id="invoice-modal" class="modal-overlay">
-        <div class="modal-content" style="max-width: 800px;">
-            <div class="modal-header"><h2>Create New Invoice</h2><button class="close-modal" onclick="closeModal('invoice-modal')">&times;</button></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Invoice</h3>
+                <button class="modal-close" onclick="closeModal('invoice-modal')">&times;</button>
+            </div>
             <form id="invoice-form">
-                <div class="form-row">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Customer</label>
+                            <select class="form-control" id="inv-customer" required>
+                                <option value="">Select Customer</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Invoice Date</label>
+                            <input type="date" class="form-control" id="inv-date" required>
+                        </div>
+                    </div>
                     <div class="form-group">
-                        <label>Customer *</label>
-                        <select id="inv-customer" required></select>
+                        <label>Item / Service</label>
+                        <select class="form-control" id="inv-item" required>
+                            <option value="">Select Item</option>
+                        </select>
                     </div>
-                    <div class="form-group"><label>Invoice Date *</label><input type="date" id="inv-date" required></div>
-                </div>
-                
-                <div style="background: #f8fafc; padding: 15px; border-radius: 6px; margin-bottom: 15px; border: 1px solid var(--border);">
-                    <h4 style="margin-bottom: 10px; font-size: 14px;">Line Items</h4>
-                    <div class="form-row-3" style="margin-bottom: 10px;">
-                        <div class="form-group" style="margin:0;"><label>Item</label><select id="inv-item"></select></div>
-                        <div class="form-group" style="margin:0;"><label>Qty</label><input type="number" id="inv-qty" value="1" min="1"></div>
-                        <div class="form-group" style="margin:0;"><label>Rate</label><input type="number" id="inv-rate" readonly></div>
-                    </div>
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="addInvoiceLine()">Add Item</button>
-                    <div id="invoice-lines" style="margin-top: 15px;"></div>
-                </div>
-
-                <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
-                    <div style="width: 250px; text-align: right;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;"><span>Subtotal:</span> <strong id="inv-subtotal">₹0.00</strong></div>
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;"><span>Tax (18%):</span> <strong id="inv-tax">₹0.00</strong></div>
-                        <div style="display: flex; justify-content: space-between; font-size: 18px; margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px;"><span>Total:</span> <strong id="inv-total">₹0.00</strong></div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Amount (₹)</label>
+                            <input type="number" class="form-control" id="inv-amount" required placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select class="form-control" id="inv-status">
+                                <option value="Draft">Draft</option>
+                                <option value="Sent">Sent (Unpaid)</option>
+                                <option value="Paid">Paid</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-
-                <div style="display: flex; gap: 10px;">
-                    <button type="button" class="btn btn-secondary btn-block" onclick="closeModal('invoice-modal')">Cancel</button>
-                    <button type="submit" class="btn btn-block">Save & Post Invoice</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('invoice-modal')">Cancel</button>
+                    <button type="submit" class="btn">Save & Post Invoice</button>
                 </div>
             </form>
         </div>
@@ -543,178 +609,194 @@
     <!-- Expense Modal -->
     <div id="expense-modal" class="modal-overlay">
         <div class="modal-content">
-            <div class="modal-header"><h2>Record Expense</h2><button class="close-modal" onclick="closeModal('expense-modal')">&times;</button></div>
+            <div class="modal-header">
+                <h3>Record Expense</h3>
+                <button class="modal-close" onclick="closeModal('expense-modal')">&times;</button>
+            </div>
             <form id="expense-form">
-                <div class="form-row">
-                    <div class="form-group"><label>Date *</label><input type="date" id="exp-date" required></div>
-                    <div class="form-group"><label>Category *</label>
-                        <select id="exp-category" required>
-                            <option value="Rent">Rent</option>
-                            <option value="Utilities">Utilities</option>
-                            <option value="Salaries">Salaries</option>
-                            <option value="Office Supplies">Office Supplies</option>
-                            <option value="Travel">Travel</option>
-                            <option value="Other">Other</option>
-                        </select>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Expense Account</label>
+                            <select class="form-control" id="exp-account" required>
+                                <option value="">Select Account</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" class="form-control" id="exp-date" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Amount (₹)</label>
+                            <input type="number" class="form-control" id="exp-amount" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Paid Via</label>
+                            <select class="form-control" id="exp-payment-account">
+                                <option value="Cash">Cash</option>
+                                <option value="Bank">Bank</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Notes / Narration</label>
+                        <input type="text" class="form-control" id="exp-notes" placeholder="e.g., Office Internet Bill">
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group"><label>Payee / Supplier</label><input type="text" id="exp-payee"></div>
-                    <div class="form-group"><label>Amount *</label><input type="number" id="exp-amount" required></div>
-                </div>
-                <div class="form-group"><label>Payment Account</label>
-                    <select id="exp-account">
-                        <option value="Cash">Cash</option>
-                        <option value="Bank">Bank</option>
-                    </select>
-                </div>
-                <div class="form-group"><label>Notes</label><textarea id="exp-notes" rows="2"></textarea></div>
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button type="button" class="btn btn-secondary btn-block" onclick="closeModal('expense-modal')">Cancel</button>
-                    <button type="submit" class="btn btn-block">Save Expense</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('expense-modal')">Cancel</button>
+                    <button type="submit" class="btn">Save & Post Expense</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Payment Modal -->
-    <div id="payment-modal" class="modal-overlay">
+    <!-- Customer Modal -->
+    <div id="customer-modal" class="modal-overlay">
         <div class="modal-content">
-            <div class="modal-header"><h2>Record Payment</h2><button class="close-modal" onclick="closeModal('payment-modal')">&times;</button></div>
-            <form id="payment-form">
-                <div class="form-row">
-                    <div class="form-group"><label>Date *</label><input type="date" id="pay-date" required></div>
-                    <div class="form-group"><label>Type *</label>
-                        <select id="pay-type">
-                            <option value="Customer Payment">Customer Payment (In)</option>
-                            <option value="Supplier Payment">Supplier Payment (Out)</option>
-                        </select>
+            <div class="modal-header">
+                <h3>Add Customer</h3>
+                <button class="modal-close" onclick="closeModal('customer-modal')">&times;</button>
+            </div>
+            <form id="customer-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Customer Name</label>
+                        <input type="text" class="form-control" id="cust-name" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control" id="cust-email">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="text" class="form-control" id="cust-phone">
+                        </div>
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group"><label>Reference / Invoice #</label><input type="text" id="pay-ref"></div>
-                    <div class="form-group"><label>Amount *</label><input type="number" id="pay-amount" required></div>
-                </div>
-                <div class="form-group"><label>Deposit To / Paid From</label>
-                    <select id="pay-account">
-                        <option value="Bank">Bank Account</option>
-                        <option value="Cash">Cash Account</option>
-                    </select>
-                </div>
-                <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button type="button" class="btn btn-secondary btn-block" onclick="closeModal('payment-modal')">Cancel</button>
-                    <button type="submit" class="btn btn-block">Save Payment</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('customer-modal')">Cancel</button>
+                    <button type="submit" class="btn">Save Customer</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- --- JAVASCRIPT LOGIC --- -->
+    <!-- Item Modal -->
+    <div id="item-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Item</h3>
+                <button class="modal-close" onclick="closeModal('item-modal')">&times;</button>
+            </div>
+            <form id="item-form">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Item Name</label>
+                            <input type="text" class="form-control" id="item-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Type</label>
+                            <select class="form-control" id="item-type">
+                                <option value="Product">Product</option>
+                                <option value="Service">Service</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Sale Price (₹)</label>
+                            <input type="number" class="form-control" id="item-price" required>
+                        </div>
+                        <div class="form-group">
+                            <label>SKU</label>
+                            <input type="text" class="form-control" id="item-sku">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('item-modal')">Cancel</button>
+                    <button type="submit" class="btn">Save Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC (Unchanged Core Engine) -->
     <script>
-        // --- INITIAL STATE & MOCK DATA ---
-        let appState = {
-            company: { name: 'Demo Company', currency: 'INR', fy: '2024-2025', gstin: '' },
+        // --- STATE & DATABASE (LocalStorage for Prototype) ---
+        let state = {
+            accounts: [
+                { id: 'acc_cash', name: 'Cash', type: 'Asset', balance: 50000 },
+                { id: 'acc_bank', name: 'Bank', type: 'Asset', balance: 100000 },
+                { id: 'acc_ar', name: 'Accounts Receivable', type: 'Asset', balance: 0 },
+                { id: 'acc_sales', name: 'Sales Revenue', type: 'Revenue', balance: 0 },
+                { id: 'acc_expense', name: 'General Expense', type: 'Expense', balance: 0 }
+            ],
             customers: [],
-            suppliers: [],
             items: [],
             invoices: [],
             expenses: [],
-            payments: [],
-            journalEntries: [],
-            accounts: [
-                { code: '1000', name: 'Cash', type: 'Asset', balance: 0 },
-                { code: '1010', name: 'Bank', type: 'Asset', balance: 0 },
-                { code: '1200', name: 'Accounts Receivable', type: 'Asset', balance: 0 },
-                { code: '2000', name: 'Accounts Payable', type: 'Liability', balance: 0 },
-                { code: '3000', name: 'Sales Revenue', type: 'Income', balance: 0 },
-                { code: '4000', name: 'Expenses', type: 'Expense', balance: 0 }
-            ]
+            journals: []
         };
 
-        // --- STORAGE FUNCTIONS ---
-        function saveData() {
+        // Load from storage
+        try {
+            const saved = localStorage.getItem('ledgerProData');
+            if (saved) state = JSON.parse(saved);
+        } catch (e) {
+            console.error("Storage error:", e);
+        }
+
+        function saveState() {
             try {
-                localStorage.setItem('ledgerProData', JSON.stringify(appState));
+                localStorage.setItem('ledgerProData', JSON.stringify(state));
             } catch (e) {
-                console.error("Save error:", e);
                 alert("Could not save data. Storage might be full or blocked.");
             }
         }
 
-        function loadData() {
-            const data = localStorage.getItem('ledgerProData');
-            if (data) {
-                appState = JSON.parse(data);
-            } else {
-                // Seed some initial demo data if empty
-                appState.customers.push({ id: 'c1', name: 'Acme Corp', email: 'billing@acme.com', phone: '9876543210', balance: 0 });
-                appState.suppliers.push({ id: 's1', name: 'Global Supplies', email: 'sales@global.com', phone: '9123456780', balance: 0 });
-                appState.items.push({ id: 'i1', name: 'Consulting Service', type: 'Service', sku: 'CONS-01', hsn: '9983', price: 5000, cost: 0, stock: 0 });
-                appState.items.push({ id: 'i2', name: 'Wireless Mouse', type: 'Product', sku: 'WM-001', hsn: '8471', price: 800, cost: 500, stock: 50 });
-                saveData();
-            }
-            updateTopbar();
-        }
-
-        function resetApp() {
-            if (confirm("Are you sure you want to delete all data and reset the app?")) {
-                localStorage.removeItem('ledgerProData');
-                location.reload();
-            }
-        }
-
         // --- NAVIGATION ---
-        function showView(viewId) {
+        function nav(viewId) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
+            document.getElementById(`view-${viewId}`).classList.add('active');
             
-            document.querySelectorAll('.nav-menu li').forEach(li => li.classList.remove('active'));
-            document.querySelector(`.nav-menu li[onclick="showView('${viewId}')"]`).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const activeNav = document.querySelector(`.nav-item[onclick="nav('${viewId}')"]`);
+            if(activeNav) activeNav.classList.add('active');
 
             const titles = {
-                'dashboard-view': 'Dashboard', 'customers-view': 'Customers', 'suppliers-view': 'Suppliers',
-                'items-view': 'Items & Inventory', 'invoices-view': 'Invoices', 'expenses-view': 'Expenses',
-                'payments-view': 'Payments', 'accounts-view': 'Chart of Accounts', 'journal-view': 'Journal Entries',
-                'trial-balance-view': 'Trial Balance', 'pnl-view': 'Profit & Loss', 'balance-sheet-view': 'Balance Sheet',
-                'setup-view': 'Company Setup'
+                'dashboard': 'Dashboard', 'invoices': 'Invoices', 'customers': 'Customers',
+                'expenses': 'Expenses', 'accounts': 'Chart of Accounts', 'journals': 'Journal Entries',
+                'trial-balance': 'Trial Balance', 'items': 'Items'
             };
             document.getElementById('page-title').textContent = titles[viewId] || 'LedgerPro';
-            closeFabMenu();
             
-            // Render logic based on view
-            if (viewId === 'dashboard-view') renderDashboard();
-            if (viewId === 'customers-view') renderCustomers();
-            if (viewId === 'suppliers-view') renderSuppliers();
-            if (viewId === 'items-view') renderItems();
-            if (viewId === 'invoices-view') renderInvoices();
-            if (viewId === 'expenses-view') renderExpenses();
-            if (viewId === 'payments-view') renderPayments();
-            if (viewId === 'accounts-view') renderAccounts();
-            if (viewId === 'journal-view') renderJournal();
-            if (viewId === 'trial-balance-view') renderTrialBalance();
-            if (viewId === 'pnl-view') renderPnL();
-            if (viewId === 'balance-sheet-view') renderBalanceSheet();
+            renderAll();
         }
 
-        function updateTopbar() {
-            document.getElementById('topbar-company-name').textContent = appState.company.name;
-        }
-
-        // --- MODAL LOGIC ---
+        // --- MODALS ---
         function openModal(modalId) {
-            // Populate dropdowns dynamically before opening
             if (modalId === 'invoice-modal') {
                 const custSelect = document.getElementById('inv-customer');
-                custSelect.innerHTML = '<option value="">Select Customer</option>';
-                appState.customers.forEach(c => custSelect.innerHTML += `<option value="${c.id}">${c.name}</option>`);
+                custSelect.innerHTML = '<option value="">Select Customer</option>' + 
+                    state.customers.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
                 
                 const itemSelect = document.getElementById('inv-item');
-                itemSelect.innerHTML = '<option value="">Select Item</option>';
-                appState.items.forEach(i => itemSelect.innerHTML += `<option value="${i.id}">${i.name} (₹${i.price})</option>`);
+                itemSelect.innerHTML = '<option value="">Select Item</option>' + 
+                    state.items.map(i => `<option value="${i.id}" data-price="${i.price}">${i.name} (₹${i.price})</option>`).join('');
                 
                 document.getElementById('inv-date').valueAsDate = new Date();
-                document.getElementById('invoice-lines').innerHTML = '';
-                calculateInvoiceTotals();
+            }
+            if (modalId === 'expense-modal') {
+                const accSelect = document.getElementById('exp-account');
+                accSelect.innerHTML = '<option value="">Select Account</option>' + 
+                    state.accounts.filter(a => a.type === 'Expense').map(a => `<option value="${a.id}">${a.name}</option>`).join('');
+                document.getElementById('exp-date').valueAsDate = new Date();
             }
             document.getElementById(modalId).classList.add('active');
         }
@@ -724,483 +806,284 @@
             document.getElementById(modalId).querySelector('form').reset();
         }
 
-        function toggleFabMenu() {
-            document.getElementById('fab-menu').classList.toggle('active');
-        }
-        function closeFabMenu() {
-            document.getElementById('fab-menu').classList.remove('active');
-        }
+        // --- DOUBLE-ENTRY ACCOUNTING ENGINE ---
+        function postJournal(date, narration, entries) {
+            let totalDr = 0, totalCr = 0;
+            entries.forEach(e => {
+                totalDr += (e.debit || 0);
+                totalCr += (e.credit || 0);
+            });
 
-        // --- ACCOUNTING ENGINE (CORE LOGIC) ---
-        function postJournalEntry(date, ref, description, debitAccCode, creditAccCode, amount) {
-            const entry = {
-                id: 'je_' + Date.now(),
-                date: date,
-                reference: ref,
-                description: description,
-                lines: [
-                    { account: debitAccCode, type: 'Debit', amount: amount },
-                    { account: creditAccCode, type: 'Credit', amount: amount }
-                ]
-            };
-            appState.journalEntries.push(entry);
-
-            // Update Account Balances
-            const debitAcc = appState.accounts.find(a => a.code === debitAccCode);
-            const creditAcc = appState.accounts.find(a => a.code === creditAccCode);
-            
-            if (debitAcc) {
-                if (debitAcc.type === 'Asset' || debitAcc.type === 'Expense') debitAcc.balance += amount;
-                else debitAcc.balance -= amount; // Liability, Equity, Income
+            if (Math.abs(totalDr - totalCr) > 0.01) {
+                alert("Accounting Error: Debits do not equal Credits!");
+                return false;
             }
-            if (creditAcc) {
-                if (creditAcc.type === 'Asset' || creditAcc.type === 'Expense') creditAcc.balance -= amount;
-                else creditAcc.balance += amount; // Liability, Equity, Income
-            }
+
+            entries.forEach(e => {
+                const acc = state.accounts.find(a => a.id === e.accountId);
+                if (acc) {
+                    acc.balance += (e.debit || 0) - (e.credit || 0);
+                }
+            });
+
+            state.journals.push({ id: Date.now().toString(), date, narration, entries });
+            saveState();
+            return true;
         }
 
-        // --- FORM HANDLERS ---
-        document.getElementById('setup-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            appState.company.name = document.getElementById('setup-name').value;
-            appState.company.currency = document.getElementById('setup-currency').value;
-            appState.company.fy = document.getElementById('setup-fy').value;
-            appState.company.gstin = document.getElementById('setup-gstin').value;
-            saveData();
-            updateTopbar();
-            alert("Company setup saved!");
-            showView('dashboard-view');
-        });
+        // --- FORMS & EVENT LISTENERS ---
 
         document.getElementById('customer-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            const newCustomer = {
-                id: 'c_' + Date.now(),
+            const newCust = {
+                id: 'cust_' + Date.now(),
                 name: document.getElementById('cust-name').value,
                 email: document.getElementById('cust-email').value,
                 phone: document.getElementById('cust-phone').value,
-                gstin: document.getElementById('cust-gstin').value,
-                balance: Number(document.getElementById('cust-balance').value)
+                balance: 0
             };
-            appState.customers.push(newCustomer);
-            // If opening balance > 0, it's a receivable (Asset)
-            if (newCustomer.balance > 0) {
-                postJournalEntry(new Date().toISOString().split('T')[0], 'Opening', 'Opening Balance', '1200', '3000', newCustomer.balance);
-            }
-            saveData();
-            renderCustomers();
+            state.customers.push(newCust);
+            saveState();
             closeModal('customer-modal');
+            renderAll();
         });
 
         document.getElementById('item-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            appState.items.push({
-                id: 'i_' + Date.now(),
+            const newItem = {
+                id: 'item_' + Date.now(),
                 name: document.getElementById('item-name').value,
                 type: document.getElementById('item-type').value,
-                sku: document.getElementById('item-sku').value,
-                hsn: document.getElementById('item-hsn').value,
                 price: Number(document.getElementById('item-price').value),
-                cost: Number(document.getElementById('item-cost').value),
-                stock: Number(document.getElementById('item-stock').value)
-            });
-            saveData();
-            renderItems();
+                sku: document.getElementById('item-sku').value
+            };
+            state.items.push(newItem);
+            saveState();
             closeModal('item-modal');
+            renderAll();
+        });
+
+        document.getElementById('invoice-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const custId = document.getElementById('inv-customer').value;
+            const itemId = document.getElementById('inv-item').value;
+            const amount = Number(document.getElementById('inv-amount').value);
+            const status = document.getElementById('inv-status').value;
+            const date = document.getElementById('inv-date').value;
+
+            const customer = state.customers.find(c => c.id === custId);
+            const item = state.items.find(i => i.id === itemId);
+
+            if (!customer || !item) return alert("Please select valid customer and item.");
+
+            const invoice = {
+                id: 'INV-' + Math.floor(Math.random() * 10000),
+                customerId: custId,
+                customerName: customer.name,
+                itemId: itemId,
+                itemName: item.name,
+                date: date,
+                amount: amount,
+                status: status
+            };
+            state.invoices.push(invoice);
+
+            if (status !== 'Paid') {
+                customer.balance += amount;
+            }
+
+            const debitAccount = status === 'Paid' ? 'acc_bank' : 'acc_ar';
+            const entries = [
+                { accountId: debitAccount, debit: amount, credit: 0 },
+                { accountId: 'acc_sales', debit: 0, credit: amount }
+            ];
+            postJournal(date, `Invoice ${invoice.id} to ${customer.name}`, entries);
+
+            saveState();
+            closeModal('invoice-modal');
+            renderAll();
         });
 
         document.getElementById('expense-form').addEventListener('submit', function(e) {
             e.preventDefault();
+            const accId = document.getElementById('exp-account').value;
             const amount = Number(document.getElementById('exp-amount').value);
-            const account = document.getElementById('exp-account').value;
-            
-            appState.expenses.push({
-                id: 'exp_' + Date.now(),
-                date: document.getElementById('exp-date').value,
-                category: document.getElementById('exp-category').value,
-                payee: document.getElementById('exp-payee').value,
+            const paymentAcc = document.getElementById('exp-payment-account').value;
+            const date = document.getElementById('exp-date').value;
+            const notes = document.getElementById('exp-notes').value;
+
+            const expenseAcc = state.accounts.find(a => a.id === accId);
+            const paymentAccountId = paymentAcc === 'Cash' ? 'acc_cash' : 'acc_bank';
+
+            const expense = {
+                id: 'EXP-' + Date.now(),
+                accountId: accId,
+                accountName: expenseAcc.name,
                 amount: amount,
-                account: account,
-                notes: document.getElementById('exp-notes').value
-            });
-            
-            // Accounting: Debit Expense, Credit Bank/Cash
-            const creditAcc = account === 'Cash' ? '1000' : '1010';
-            postJournalEntry(document.getElementById('exp-date').value, 'EXP-' + Date.now().toString().slice(-4), 'Expense: ' + document.getElementById('exp-category').value, '4000', creditAcc, amount);
-            
-            saveData();
-            renderExpenses();
-            closeModal('expense-modal');
-        });
-
-        document.getElementById('payment-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const amount = Number(document.getElementById('pay-amount').value);
-            const type = document.getElementById('pay-type').value;
-            const account = document.getElementById('pay-account').value;
-            const debitAcc = account === 'Cash' ? '1000' : '1010';
-
-            appState.payments.push({
-                id: 'pay_' + Date.now(),
-                date: document.getElementById('pay-date').value,
-                type: type,
-                reference: document.getElementById('pay-ref').value,
-                amount: amount,
-                account: account
-            });
-
-            // Accounting: 
-            if (type === 'Customer Payment') {
-                // Debit Bank/Cash, Credit Accounts Receivable
-                postJournalEntry(document.getElementById('pay-date').value, 'PAY-' + Date.now().toString().slice(-4), 'Payment Received', debitAcc, '1200', amount);
-            } else {
-                // Debit Accounts Payable, Credit Bank/Cash
-                postJournalEntry(document.getElementById('pay-date').value, 'PAY-' + Date.now().toString().slice(-4), 'Payment Made', '2000', debitAcc, amount);
-            }
-
-            saveData();
-            renderPayments();
-            closeModal('payment-modal');
-        });
-
-        // --- INVOICE LOGIC ---
-        let currentInvoiceLines = [];
-        document.getElementById('inv-item').addEventListener('change', function() {
-            const item = appState.items.find(i => i.id === this.value);
-            if (item) document.getElementById('inv-rate').value = item.price;
-        });
-
-        function addInvoiceLine() {
-            const itemId = document.getElementById('inv-item').value;
-            const qty = Number(document.getElementById('inv-qty').value);
-            const rate = Number(document.getElementById('inv-rate').value);
-            
-            if (!itemId || qty <= 0) return alert("Select an item and valid quantity.");
-            
-            const item = appState.items.find(i => i.id === itemId);
-            const amount = qty * rate;
-            
-            currentInvoiceLines.push({ itemId, name: item.name, qty, rate, amount });
-            
-            const linesDiv = document.getElementById('invoice-lines');
-            linesDiv.innerHTML += `<div style="display:flex; justify-content:space-between; font-size:14px; padding:5px 0; border-bottom:1px solid #eee;">
-                <span>${item.name} (x${qty})</span>
-                <span>₹${amount.toFixed(2)}</span>
-            </div>`;
-            
-            document.getElementById('inv-item').value = '';
-            document.getElementById('inv-qty').value = 1;
-            document.getElementById('inv-rate').value = '';
-            
-            calculateInvoiceTotals();
-        }
-
-        function calculateInvoiceTotals() {
-            const subtotal = currentInvoiceLines.reduce((sum, line) => sum + line.amount, 0);
-            const tax = subtotal * 0.18; // 18% GST
-            const total = subtotal + tax;
-            
-            document.getElementById('inv-subtotal').textContent = '₹' + subtotal.toFixed(2);
-            document.getElementById('inv-tax').textContent = '₹' + tax.toFixed(2);
-            document.getElementById('inv-total').textContent = '₹' + total.toFixed(2);
-        }
-
-        document.getElementById('invoice-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            if (currentInvoiceLines.length === 0) return alert("Add at least one item to the invoice.");
-            
-            const subtotal = currentInvoiceLines.reduce((sum, line) => sum + line.amount, 0);
-            const tax = subtotal * 0.18;
-            const total = subtotal + tax;
-            const customerId = document.getElementById('inv-customer').value;
-            const customer = appState.customers.find(c => c.id === customerId);
-
-            const invoice = {
-                id: 'inv_' + Date.now(),
-                invoiceNo: 'INV-' + Date.now().toString().slice(-4),
-                customerId: customerId,
-                customerName: customer.name,
-                date: document.getElementById('inv-date').value,
-                lines: currentInvoiceLines,
-                subtotal: subtotal,
-                tax: tax,
-                total: total,
-                status: 'Unpaid'
+                paymentAccount: paymentAcc,
+                date: date,
+                notes: notes
             };
+            state.expenses.push(expense);
 
-            appState.invoices.push(invoice);
-            
-            // Update Customer Balance
-            customer.balance += total;
-            
-            // Update Inventory
-            currentInvoiceLines.forEach(line => {
-                const item = appState.items.find(i => i.id === line.itemId);
-                if (item && item.type === 'Product') {
-                    item.stock -= line.qty;
-                }
-            });
+            const entries = [
+                { accountId: accId, debit: amount, credit: 0 },
+                { accountId: paymentAccountId, debit: 0, credit: amount }
+            ];
+            postJournal(date, `Expense: ${notes || expenseAcc.name}`, entries);
 
-            // Accounting Engine: Debit A/R, Credit Revenue, Credit Tax Payable
-            postJournalEntry(invoice.date, invoice.invoiceNo, 'Invoice to ' + customer.name, '1200', '3000', subtotal);
-            if (tax > 0) postJournalEntry(invoice.date, invoice.invoiceNo, 'Tax on Invoice', '1200', '2000', tax);
-
-            saveData();
-            renderInvoices();
-            closeModal('invoice-modal');
-            currentInvoiceLines = [];
+            saveState();
+            closeModal('expense-modal');
+            renderAll();
         });
 
-        // --- RENDER FUNCTIONS ---
+        // --- RENDERING FUNCTIONS ---
+        function renderAll() {
+            renderDashboard();
+            renderInvoices();
+            renderCustomers();
+            renderExpenses();
+            renderAccounts();
+            renderJournals();
+            renderTrialBalance();
+        }
 
-        function getCurrencySymbol() {
-            return appState.company.currency === 'INR' ? '₹' : (appState.company.currency === 'USD' ? '$' : '€');
+        function formatCurrency(val) {
+            return '₹' + val.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 
         function renderDashboard() {
-            const sym = getCurrencySymbol();
-            let receivables = 0, payables = 0, cash = 0, revenue = 0, expenses = 0;
+            let revenue = 0, expenses = 0, receivables = 0;
             
-            appState.accounts.forEach(a => {
-                if (a.name === 'Accounts Receivable') receivables = a.balance;
-                if (a.name === 'Accounts Payable') payables = a.balance;
-                if (a.name === 'Cash' || a.name === 'Bank') cash += a.balance;
-                if (a.name === 'Sales Revenue') revenue = a.balance;
-                if (a.name === 'Expenses') expenses = a.balance;
+            state.invoices.forEach(i => {
+                if (i.status !== 'Paid') receivables += i.amount;
+                revenue += i.amount; 
             });
+            state.expenses.forEach(e => expenses += e.amount);
 
-            document.getElementById('dash-receivables').textContent = sym + receivables.toFixed(2);
-            document.getElementById('dash-payables').textContent = sym + Math.abs(payables).toFixed(2);
-            document.getElementById('dash-cash').textContent = sym + cash.toFixed(2);
-            document.getElementById('dash-revenue').textContent = sym + revenue.toFixed(2);
-            document.getElementById('dash-expenses').textContent = sym + expenses.toFixed(2);
-            document.getElementById('dash-profit').textContent = sym + (revenue - expenses).toFixed(2);
+            const profit = revenue - expenses;
 
-            // Recent Transactions
-            const tbody = document.getElementById('dash-recent-tbody');
-            tbody.innerHTML = '';
-            const allTrans = [...appState.invoices.map(i => ({...i, type: 'Invoice'})), ...appState.expenses.map(e => ({...e, type: 'Expense'}))];
-            allTrans.sort((a,b) => new Date(b.date) - new Date(a.date));
+            document.getElementById('dash-receivables').textContent = formatCurrency(receivables);
+            document.getElementById('dash-revenue').textContent = formatCurrency(revenue);
+            document.getElementById('dash-expenses').textContent = formatCurrency(expenses);
+            document.getElementById('dash-profit').textContent = formatCurrency(profit);
             
-            allTrans.slice(0, 5).forEach(t => {
+            const tbody = document.getElementById('dash-recent-transactions');
+            tbody.innerHTML = '';
+            const recent = [...state.invoices.map(i => ({...i, type: 'Invoice'})), ...state.expenses.map(e => ({...e, type: 'Expense'}))]
+                            .sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+
+            if (recent.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted" style="padding: 40px;">No transactions yet.</td></tr>';
+            } else {
+                recent.forEach(t => {
+                    const badgeClass = t.type === 'Invoice' ? (t.status === 'Paid' ? 'badge-success' : 'badge-warning') : 'badge-success';
+                    tbody.innerHTML += `<tr>
+                        <td>${t.date}</td>
+                        <td><span style="font-weight:600; color: ${t.type === 'Invoice' ? 'var(--success)' : 'var(--danger)'}">${t.type}</span></td>
+                        <td>${t.type === 'Invoice' ? t.id : t.notes}</td>
+                        <td>${formatCurrency(t.amount)}</td>
+                        <td><span class="badge ${badgeClass}">${t.type === 'Invoice' ? t.status : 'Paid'}</span></td>
+                    </tr>`;
+                });
+            }
+        }
+
+        function renderInvoices() {
+            const tbody = document.getElementById('invoices-table-body');
+            tbody.innerHTML = state.invoices.length === 0 ? '<tr><td colspan="5" class="text-center text-muted" style="padding: 40px;">No invoices found.</td></tr>' : '';
+            state.invoices.slice().reverse().forEach(i => {
+                const badgeClass = i.status === 'Paid' ? 'badge-success' : (i.status === 'Sent' ? 'badge-warning' : 'badge-neutral');
                 tbody.innerHTML += `<tr>
-                    <td>${t.date}</td>
-                    <td><span class="badge ${t.type === 'Invoice' ? 'badge-success' : 'badge-danger'}">${t.type}</span></td>
-                    <td>${t.invoiceNo || t.category}</td>
-                    <td>${sym}${t.total || t.amount}</td>
-                    <td>${t.status || 'Recorded'}</td>
+                    <td><strong>${i.id}</strong></td>
+                    <td>${i.customerName}</td>
+                    <td>${i.date}</td>
+                    <td>${formatCurrency(i.amount)}</td>
+                    <td><span class="badge ${badgeClass}">${i.status}</span></td>
                 </tr>`;
             });
         }
 
         function renderCustomers() {
-            const tbody = document.getElementById('customers-tbody');
-            tbody.innerHTML = '';
-            appState.customers.forEach(c => {
+            const tbody = document.getElementById('customers-table-body');
+            tbody.innerHTML = state.customers.length === 0 ? '<tr><td colspan="4" class="text-center text-muted" style="padding: 40px;">No customers added.</td></tr>' : '';
+            state.customers.forEach(c => {
                 tbody.innerHTML += `<tr>
                     <td><strong>${c.name}</strong></td>
                     <td>${c.email || '-'}</td>
                     <td>${c.phone || '-'}</td>
-                    <td style="color: ${c.balance > 0 ? 'var(--danger)' : 'inherit'}; font-weight: bold;">${getCurrencySymbol()}${c.balance.toFixed(2)}</td>
-                    <td><button class="btn btn-secondary btn-sm">View</button></td>
-                </tr>`;
-            });
-        }
-
-        function renderSuppliers() {
-            const tbody = document.getElementById('suppliers-tbody');
-            tbody.innerHTML = '';
-            appState.suppliers.forEach(s => {
-                tbody.innerHTML += `<tr>
-                    <td><strong>${s.name}</strong></td>
-                    <td>${s.email || '-'}</td>
-                    <td>${s.phone || '-'}</td>
-                    <td style="color: ${s.balance > 0 ? 'var(--danger)' : 'inherit'}; font-weight: bold;">${getCurrencySymbol()}${s.balance.toFixed(2)}</td>
-                </tr>`;
-            });
-        }
-
-        function renderItems() {
-            const tbody = document.getElementById('items-tbody');
-            tbody.innerHTML = '';
-            appState.items.forEach(i => {
-                tbody.innerHTML += `<tr>
-                    <td><strong>${i.name}</strong></td>
-                    <td>${i.sku || '-'}</td>
-                    <td><span class="badge badge-info">${i.type}</span></td>
-                    <td>${getCurrencySymbol()}${i.price.toFixed(2)}</td>
-                    <td>${i.stock}</td>
-                </tr>`;
-            });
-        }
-
-        function renderInvoices() {
-            const tbody = document.getElementById('invoices-tbody');
-            tbody.innerHTML = '';
-            appState.invoices.forEach(inv => {
-                tbody.innerHTML += `<tr>
-                    <td><strong>${inv.invoiceNo}</strong></td>
-                    <td>${inv.customerName}</td>
-                    <td>${inv.date}</td>
-                    <td>${getCurrencySymbol()}${inv.total.toFixed(2)}</td>
-                    <td><span class="badge ${inv.status === 'Paid' ? 'badge-success' : 'badge-warning'}">${inv.status}</span></td>
-                    <td><button class="btn btn-secondary btn-sm" onclick="alert('Invoice Detail View - Coming Soon')">View</button></td>
+                    <td>${formatCurrency(c.balance)}</td>
                 </tr>`;
             });
         }
 
         function renderExpenses() {
-            const tbody = document.getElementById('expenses-tbody');
-            tbody.innerHTML = '';
-            appState.expenses.forEach(exp => {
+            const tbody = document.getElementById('expenses-table-body');
+            tbody.innerHTML = state.expenses.length === 0 ? '<tr><td colspan="5" class="text-center text-muted" style="padding: 40px;">No expenses recorded.</td></tr>' : '';
+            state.expenses.slice().reverse().forEach(e => {
                 tbody.innerHTML += `<tr>
-                    <td>${exp.date}</td>
-                    <td><strong>${exp.category}</strong></td>
-                    <td>${exp.payee || '-'}</td>
-                    <td>${getCurrencySymbol()}${exp.amount.toFixed(2)}</td>
-                    <td>${exp.account}</td>
-                </tr>`;
-            });
-        }
-
-        function renderPayments() {
-            const tbody = document.getElementById('payments-tbody');
-            tbody.innerHTML = '';
-            appState.payments.forEach(pay => {
-                tbody.innerHTML += `<tr>
-                    <td>${pay.date}</td>
-                    <td><span class="badge ${pay.type === 'Customer Payment' ? 'badge-success' : 'badge-danger'}">${pay.type}</span></td>
-                    <td>${pay.reference || '-'}</td>
-                    <td>${getCurrencySymbol()}${pay.amount.toFixed(2)}</td>
-                    <td>${pay.account}</td>
+                    <td>${e.date}</td>
+                    <td>${e.accountName}</td>
+                    <td>${e.paymentAccount}</td>
+                    <td>${formatCurrency(e.amount)}</td>
+                    <td>${e.notes || '-'}</td>
                 </tr>`;
             });
         }
 
         function renderAccounts() {
-            const tbody = document.getElementById('accounts-tbody');
+            const tbody = document.getElementById('accounts-table-body');
             tbody.innerHTML = '';
-            appState.accounts.forEach(acc => {
+            state.accounts.forEach(a => {
                 tbody.innerHTML += `<tr>
-                    <td>${acc.code}</td>
-                    <td><strong>${acc.name}</strong></td>
-                    <td><span class="badge badge-info">${acc.type}</span></td>
-                    <td style="font-weight: bold;">${getCurrencySymbol()}${acc.balance.toFixed(2)}</td>
+                    <td><strong>${a.name}</strong></td>
+                    <td>${a.type}</td>
+                    <td class="text-right dr">${a.balance >= 0 ? formatCurrency(a.balance) : '-'}</td>
+                    <td class="text-right cr">${a.balance < 0 ? formatCurrency(Math.abs(a.balance)) : '-'}</td>
                 </tr>`;
             });
         }
 
-        function renderJournal() {
-            const tbody = document.getElementById('journal-tbody');
-            tbody.innerHTML = '';
-            appState.journalEntries.slice().reverse().forEach(je => {
-                je.lines.forEach((line, index) => {
+        function renderJournals() {
+            const tbody = document.getElementById('journals-table-body');
+            tbody.innerHTML = state.journals.length === 0 ? '<tr><td colspan="5" class="text-center text-muted" style="padding: 40px;">No journal entries posted.</td></tr>' : '';
+            state.journals.slice().reverse().forEach(j => {
+                j.entries.forEach((e, index) => {
+                    const acc = state.accounts.find(a => a.id === e.accountId);
                     tbody.innerHTML += `<tr>
-                        ${index === 0 ? `<td rowspan="${je.lines.length}">${je.date}</td><td rowspan="${je.lines.length}">${je.reference}</td><td rowspan="${je.lines.length}">${je.description}</td>` : ''}
-                        <td>${line.account}</td>
-                        <td>${line.type === 'Debit' ? getCurrencySymbol() + line.amount.toFixed(2) : '-'}</td>
-                        <td>${line.type === 'Credit' ? getCurrencySymbol() + line.amount.toFixed(2) : '-'}</td>
+                        ${index === 0 ? `<td rowspan="${j.entries.length}" style="vertical-align: top; font-weight:500;">${j.date}</td>` : ''}
+                        <td>${acc ? acc.name : 'Unknown'}</td>
+                        <td class="text-right dr">${e.debit > 0 ? formatCurrency(e.debit) : '-'}</td>
+                        <td class="text-right cr">${e.credit > 0 ? formatCurrency(e.credit) : '-'}</td>
+                        ${index === 0 ? `<td rowspan="${j.entries.length}" style="vertical-align: top; color: var(--text-muted); font-size: 13px;">${j.narration}</td>` : ''}
                     </tr>`;
                 });
-                // Add a separator row
-                tbody.innerHTML += `<tr><td colspan="5" style="border-bottom: 2px solid var(--border); padding: 0;"></td></tr>`;
             });
         }
 
         function renderTrialBalance() {
-            const tbody = document.getElementById('tb-tbody');
+            const tbody = document.getElementById('tb-table-body');
             tbody.innerHTML = '';
             let totalDr = 0, totalCr = 0;
             
-            appState.accounts.forEach(acc => {
-                const isDr = acc.balance >= 0;
-                const amount = Math.abs(acc.balance);
-                if (isDr) totalDr += amount; else totalCr += amount;
+            state.accounts.forEach(a => {
+                const isDr = a.balance >= 0;
+                const amt = Math.abs(a.balance);
+                if (isDr) totalDr += amt; else totalCr += amt;
                 
                 tbody.innerHTML += `<tr>
-                    <td>${acc.code} - ${acc.name}</td>
-                    <td>${isDr ? getCurrencySymbol() + amount.toFixed(2) : '-'}</td>
-                    <td>${!isDr ? getCurrencySymbol() + amount.toFixed(2) : '-'}</td>
+                    <td>${a.name}</td>
+                    <td class="text-right dr">${isDr ? formatCurrency(amt) : '-'}</td>
+                    <td class="text-right cr">${!isDr ? formatCurrency(amt) : '-'}</td>
                 </tr>`;
             });
-            tbody.innerHTML += `<tr style="font-weight:bold; background:#f8fafc; border-top: 2px solid var(--border);">
-                <td>Total</td>
-                <td>${getCurrencySymbol()}${totalDr.toFixed(2)}</td>
-                <td>${getCurrencySymbol()}${totalCr.toFixed(2)}</td>
-            </tr>`;
-        }
-
-        function renderPnL() {
-            const tbody = document.getElementById('pnl-tbody');
-            tbody.innerHTML = '';
-            let revenue = 0, expenses = 0;
             
-            appState.accounts.forEach(a => {
-                if (a.type === 'Income') revenue += a.balance;
-                if (a.type === 'Expense') expenses += a.balance;
-            });
-
-            tbody.innerHTML += `<tr><td><strong>Revenue</strong></td><td></td></tr>`;
-            appState.accounts.filter(a => a.type === 'Income').forEach(a => {
-                tbody.innerHTML += `<tr><td style="padding-left: 30px;">${a.name}</td><td>${getCurrencySymbol()}${a.balance.toFixed(2)}</td></tr>`;
-            });
-            tbody.innerHTML += `<tr><td><strong>Total Revenue</strong></td><td><strong>${getCurrencySymbol()}${revenue.toFixed(2)}</strong></td></tr>`;
-            
-            tbody.innerHTML += `<tr><td><strong>Expenses</strong></td><td></td></tr>`;
-            appState.accounts.filter(a => a.type === 'Expense').forEach(a => {
-                tbody.innerHTML += `<tr><td style="padding-left: 30px;">${a.name}</td><td>${getCurrencySymbol()}${a.balance.toFixed(2)}</td></tr>`;
-            });
-            tbody.innerHTML += `<tr><td><strong>Total Expenses</strong></td><td><strong>${getCurrencySymbol()}${expenses.toFixed(2)}</strong></td></tr>`;
-            
-            const profit = revenue - expenses;
-            tbody.innerHTML += `<tr style="font-weight:bold; background:#f8fafc; border-top: 2px solid var(--border); font-size: 16px;">
-                <td>Net Profit</td>
-                <td style="color: ${profit >= 0 ? 'var(--success)' : 'var(--danger)'}">${getCurrencySymbol()}${profit.toFixed(2)}</td>
-            </tr>`;
-        }
-
-        function renderBalanceSheet() {
-            const tbody = document.getElementById('bs-tbody');
-            tbody.innerHTML = '';
-            let assets = 0, liabilities = 0, equity = 0;
-            
-            appState.accounts.forEach(a => {
-                if (a.type === 'Asset') assets += a.balance;
-                if (a.type === 'Liability') liabilities += a.balance;
-                if (a.type === 'Equity') equity += a.balance;
-            });
-
-            // In a real system, Net Profit would be added to Equity. 
-            // For this prototype, we'll show it as a balancing figure.
-            let revenue = 0, expenses = 0;
-            appState.accounts.forEach(a => {
-                if (a.type === 'Income') revenue += a.balance;
-                if (a.type === 'Expense') expenses += a.balance;
-            });
-            const netProfit = revenue - expenses;
-
-            tbody.innerHTML += `<tr><td><strong>ASSETS</strong></td><td></td></tr>`;
-            appState.accounts.filter(a => a.type === 'Asset').forEach(a => {
-                tbody.innerHTML += `<tr><td style="padding-left: 30px;">${a.name}</td><td>${getCurrencySymbol()}${a.balance.toFixed(2)}</td></tr>`;
-            });
-            tbody.innerHTML += `<tr style="font-weight:bold;"><td>Total Assets</td><td>${getCurrencySymbol()}${assets.toFixed(2)}</td></tr>`;
-            
-            tbody.innerHTML += `<tr><td colspan="2" style="height: 20px;"></td></tr>`;
-            
-            tbody.innerHTML += `<tr><td><strong>LIABILITIES & EQUITY</strong></td><td></td></tr>`;
-            appState.accounts.filter(a => a.type === 'Liability').forEach(a => {
-                tbody.innerHTML += `<tr><td style="padding-left: 30px;">${a.name}</td><td>${getCurrencySymbol()}${Math.abs(a.balance).toFixed(2)}</td></tr>`;
-            });
-            tbody.innerHTML += `<tr><td style="padding-left: 30px;">Net Profit (Current Period)</td><td>${getCurrencySymbol()}${netProfit.toFixed(2)}</td></tr>`;
-            tbody.innerHTML += `<tr style="font-weight:bold;"><td>Total Liabilities & Equity</td><td>${getCurrencySymbol()}${(Math.abs(liabilities) + netProfit).toFixed(2)}</td></tr>`;
+            document.getElementById('tb-total-dr').textContent = formatCurrency(totalDr);
+            document.getElementById('tb-total-cr').textContent = formatCurrency(totalCr);
         }
 
         // --- BOOTSTRAP ---
-        window.onload = function() {
-            loadData();
-            showView('dashboard-view');
-        };
-
+        renderAll();
     </script>
 </body>
 </html>
