@@ -14,7 +14,6 @@
     <style>
         /* --- MODERN SAAS DESIGN SYSTEM --- */
         :root {
-            /* Colors */
             --primary: #4F46E5;
             --primary-hover: #4338CA;
             --primary-light: #EEF2FF;
@@ -33,13 +32,9 @@
             --danger-bg: #FEE2E2;
             --warning: #F59E0B;
             --warning-bg: #FEF3C7;
-            
-            /* Spacing & Radius */
             --radius-md: 8px;
             --radius-lg: 12px;
             --radius-full: 9999px;
-            
-            /* Shadows */
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -302,6 +297,10 @@
         
         <div class="nav-section">Inventory</div>
         <div class="nav-item" onclick="nav('items')"><i class="fa-solid fa-boxes-stacked"></i> Items</div>
+
+        <div class="nav-section" style="margin-top: auto;">Demo Controls</div>
+        <div class="nav-item" onclick="loadSampleData()" style="color: var(--warning);"><i class="fa-solid fa-flask"></i> Load Sample Data</div>
+        <div class="nav-item" onclick="clearData()" style="color: var(--danger);"><i class="fa-solid fa-trash"></i> Clear All Data</div>
     </div>
 
     <!-- MAIN CONTENT -->
@@ -413,9 +412,7 @@
                                     <th>Status</th>
                                 </tr>
                             </thead>
-                            <tbody id="invoices-table-body">
-                                <!-- Injected via JS -->
-                            </tbody>
+                            <tbody id="invoices-table-body"></tbody>
                         </table>
                     </div>
                 </div>
@@ -438,9 +435,7 @@
                                     <th>Outstanding Balance</th>
                                 </tr>
                             </thead>
-                            <tbody id="customers-table-body">
-                                <!-- Injected via JS -->
-                            </tbody>
+                            <tbody id="customers-table-body"></tbody>
                         </table>
                     </div>
                 </div>
@@ -464,9 +459,7 @@
                                     <th>Notes</th>
                                 </tr>
                             </thead>
-                            <tbody id="expenses-table-body">
-                                <!-- Injected via JS -->
-                            </tbody>
+                            <tbody id="expenses-table-body"></tbody>
                         </table>
                     </div>
                 </div>
@@ -488,9 +481,7 @@
                                     <th class="text-right">Credit (Cr)</th>
                                 </tr>
                             </thead>
-                            <tbody id="accounts-table-body">
-                                <!-- Injected via JS -->
-                            </tbody>
+                            <tbody id="accounts-table-body"></tbody>
                         </table>
                     </div>
                 </div>
@@ -513,9 +504,7 @@
                                     <th>Narration</th>
                                 </tr>
                             </thead>
-                            <tbody id="journals-table-body">
-                                <!-- Injected via JS -->
-                            </tbody>
+                            <tbody id="journals-table-body"></tbody>
                         </table>
                     </div>
                 </div>
@@ -536,9 +525,7 @@
                                     <th class="text-right">Credit (Cr)</th>
                                 </tr>
                             </thead>
-                            <tbody id="tb-table-body">
-                                <!-- Injected via JS -->
-                            </tbody>
+                            <tbody id="tb-table-body"></tbody>
                             <tfoot>
                                 <tr style="font-weight: 700; background: #F8FAFC; border-top: 2px solid var(--border);">
                                     <td>Total</td>
@@ -726,16 +713,18 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC (Unchanged Core Engine) -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
         // --- STATE & DATABASE (LocalStorage for Prototype) ---
         let state = {
             accounts: [
-                { id: 'acc_cash', name: 'Cash', type: 'Asset', balance: 50000 },
-                { id: 'acc_bank', name: 'Bank', type: 'Asset', balance: 100000 },
+                { id: 'acc_cash', name: 'Cash', type: 'Asset', balance: 0 },
+                { id: 'acc_bank', name: 'Bank', type: 'Asset', balance: 0 },
                 { id: 'acc_ar', name: 'Accounts Receivable', type: 'Asset', balance: 0 },
+                { id: 'acc_equity', name: 'Owner\'s Equity', type: 'Equity', balance: 0 },
                 { id: 'acc_sales', name: 'Sales Revenue', type: 'Revenue', balance: 0 },
-                { id: 'acc_expense', name: 'General Expense', type: 'Expense', balance: 0 }
+                { id: 'acc_rent', name: 'Rent Expense', type: 'Expense', balance: 0 },
+                { id: 'acc_salary', name: 'Salary Expense', type: 'Expense', balance: 0 }
             ],
             customers: [],
             items: [],
@@ -757,6 +746,110 @@
                 localStorage.setItem('ledgerProData', JSON.stringify(state));
             } catch (e) {
                 alert("Could not save data. Storage might be full or blocked.");
+            }
+        }
+
+        // --- DEMO DATA GENERATOR ---
+        function loadSampleData() {
+            // 1. Setup Master Data
+            state.customers = [
+                { id: 'cust_1', name: 'Acme Corp', email: 'billing@acme.com', phone: '9876543210', balance: 10000 },
+                { id: 'cust_2', name: 'John Doe', email: 'john@example.com', phone: '9123456789', balance: 0 }
+            ];
+            state.items = [
+                { id: 'item_1', name: 'Consulting Service', type: 'Service', price: 10000, sku: 'CON-001' },
+                { id: 'item_2', name: 'Web Hosting', type: 'Service', price: 5000, sku: 'WEB-001' }
+            ];
+
+            // 2. Setup Transactions
+            state.invoices = [
+                { id: 'INV-1001', customerId: 'cust_1', customerName: 'Acme Corp', itemId: 'item_1', itemName: 'Consulting Service', date: '2024-05-01', amount: 10000, status: 'Sent' },
+                { id: 'INV-1002', customerId: 'cust_2', customerName: 'John Doe', itemId: 'item_2', itemName: 'Web Hosting', date: '2024-05-05', amount: 5000, status: 'Paid' }
+            ];
+            state.expenses = [
+                { id: 'EXP-2001', accountId: 'acc_rent', accountName: 'Rent Expense', amount: 15000, paymentAccount: 'Bank', date: '2024-05-02', notes: 'Office Rent for May' },
+                { id: 'EXP-2002', accountId: 'acc_salary', accountName: 'Salary Expense', amount: 25000, paymentAccount: 'Bank', date: '2024-05-05', notes: 'Staff Salaries' }
+            ];
+
+            // 3. Reset Accounts to Opening Balances
+            state.accounts = [
+                { id: 'acc_cash', name: 'Cash', type: 'Asset', balance: 50000 },
+                { id: 'acc_bank', name: 'Bank', type: 'Asset', balance: 250000 },
+                { id: 'acc_ar', name: 'Accounts Receivable', type: 'Asset', balance: 0 },
+                { id: 'acc_equity', name: 'Owner\'s Equity', type: 'Equity', balance: -300000 }, // Credit balance (negative in this model)
+                { id: 'acc_sales', name: 'Sales Revenue', type: 'Revenue', balance: 0 },
+                { id: 'acc_rent', name: 'Rent Expense', type: 'Expense', balance: 0 },
+                { id: 'acc_salary', name: 'Salary Expense', type: 'Expense', balance: 0 }
+            ];
+
+            // 4. Generate Double-Entry Journals
+            state.journals = [];
+            
+            // Opening Balance Journal
+            state.journals.push({
+                id: 'JRN-OPEN', date: '2024-04-01', narration: 'Opening Balances',
+                entries: [
+                    { accountId: 'acc_cash', debit: 50000, credit: 0 },
+                    { accountId: 'acc_bank', debit: 250000, credit: 0 },
+                    { accountId: 'acc_equity', debit: 0, credit: 300000 }
+                ]
+            });
+
+            // Invoice 1001 (Unpaid)
+            state.journals.push({
+                id: 'JRN-INV-1001', date: '2024-05-01', narration: 'Invoice INV-1001 to Acme Corp',
+                entries: [
+                    { accountId: 'acc_ar', debit: 10000, credit: 0 },
+                    { accountId: 'acc_sales', debit: 0, credit: 10000 }
+                ]
+            });
+
+            // Invoice 1002 (Paid)
+            state.journals.push({
+                id: 'JRN-INV-1002', date: '2024-05-05', narration: 'Invoice INV-1002 to John Doe',
+                entries: [
+                    { accountId: 'acc_bank', debit: 5000, credit: 0 },
+                    { accountId: 'acc_sales', debit: 0, credit: 5000 }
+                ]
+            });
+
+            // Expense 2001 (Rent)
+            state.journals.push({
+                id: 'JRN-EXP-2001', date: '2024-05-02', narration: 'Expense: Office Rent for May',
+                entries: [
+                    { accountId: 'acc_rent', debit: 15000, credit: 0 },
+                    { accountId: 'acc_bank', debit: 0, credit: 15000 }
+                ]
+            });
+
+            // Expense 2002 (Salary)
+            state.journals.push({
+                id: 'JRN-EXP-2002', date: '2024-05-05', narration: 'Expense: Staff Salaries',
+                entries: [
+                    { accountId: 'acc_salary', debit: 25000, credit: 0 },
+                    { accountId: 'acc_bank', debit: 0, credit: 25000 }
+                ]
+            });
+
+            // Recalculate Account Balances based on Journals
+            state.accounts.forEach(a => a.balance = 0);
+            state.journals.forEach(j => {
+                j.entries.forEach(e => {
+                    const acc = state.accounts.find(a => a.id === e.accountId);
+                    if(acc) acc.balance += (e.debit || 0) - (e.credit || 0);
+                });
+            });
+
+            saveState();
+            renderAll();
+            nav('dashboard');
+            alert("Sample data loaded successfully!");
+        }
+
+        function clearData() {
+            if(confirm("Are you sure you want to clear all data? This cannot be undone.")) {
+                localStorage.removeItem('ledgerProData');
+                location.reload();
             }
         }
 
@@ -1038,7 +1131,7 @@
                 tbody.innerHTML += `<tr>
                     <td><strong>${a.name}</strong></td>
                     <td>${a.type}</td>
-                    <td class="text-right dr">${a.balance >= 0 ? formatCurrency(a.balance) : '-'}</td>
+                    <td class="text-right dr">${a.balance > 0 ? formatCurrency(a.balance) : '-'}</td>
                     <td class="text-right cr">${a.balance < 0 ? formatCurrency(Math.abs(a.balance)) : '-'}</td>
                 </tr>`;
             });
@@ -1067,7 +1160,7 @@
             let totalDr = 0, totalCr = 0;
             
             state.accounts.forEach(a => {
-                const isDr = a.balance >= 0;
+                const isDr = a.balance > 0;
                 const amt = Math.abs(a.balance);
                 if (isDr) totalDr += amt; else totalCr += amt;
                 
