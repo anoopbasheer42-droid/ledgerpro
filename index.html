@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LedgerPro · Welcome</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+/* Login-specific layout (only used here) */
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.login-brand {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  color: white;
+  padding: 60px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+.login-brand::before {
+  content: "";
+  position: absolute;
+  top: -100px; right: -100px;
+  width: 400px; height: 400px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+}
+.login-brand::after {
+  content: "";
+  position: absolute;
+  bottom: -150px; left: -100px;
+  width: 500px; height: 500px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 50%;
+}
+.login-brand-inner { position: relative; z-index: 2; }
+.login-logo {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 60px;
+}
+.login-logo-mark {
+  width: 44px; height: 44px; border-radius: 10px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 20px;
+}
+.login-logo-text { font-size: 20px; font-weight: 800; letter-spacing: -0.3px; }
+.login-hero-title {
+  font-size: 32px; font-weight: 800; letter-spacing: -0.8px;
+  line-height: 1.2; margin-bottom: 16px;
+}
+.login-hero-sub {
+  font-size: 15px; opacity: 0.85; line-height: 1.6; max-width: 400px;
+}
+.login-features {
+  margin-top: 40px; display: flex; flex-direction: column; gap: 14px;
+  position: relative; z-index: 2;
+}
+.login-feature {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 13px; opacity: 0.9;
+}
+.login-feature-icon {
+  width: 24px; height: 24px; border-radius: 6px;
+  background: rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; flex-shrink: 0;
+}
+.login-footer {
+  font-size: 11px; opacity: 0.7;
+  position: relative; z-index: 2;
+}
+
+.login-form-side {
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 24px;
+  background: var(--bg-app);
+}
+.login-form-wrap { width: 100%; max-width: 420px; }
+.login-form-title {
+  font-size: 24px; font-weight: 800; letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+.login-form-sub {
+  font-size: 14px; color: var(--text-3); margin-bottom: 32px;
+}
+.login-form-hint {
+  font-size: 12px; color: var(--text-3);
+  margin-top: 20px; text-align: center; line-height: 1.6;
+}
+.login-form-hint code {
+  background: var(--bg-active); padding: 1px 6px;
+  border-radius: 3px; font-family: var(--font-num); font-size: 11px;
+}
+.login-company-list {
+  display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;
+}
+.login-company-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px; border: 1px solid var(--border-2);
+  border-radius: var(--r-md); cursor: pointer;
+  background: var(--bg-surface); transition: all 0.12s ease;
+}
+.login-company-item:hover {
+  border-color: var(--primary); background: var(--primary-soft);
+}
+.login-company-item.selected {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+.login-company-name { font-weight: 600; font-size: 14px; }
+.login-company-meta { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+.login-company-check {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid var(--border-2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: transparent;
+}
+.login-company-item.selected .login-company-check {
+  background: var(--primary); border-color: var(--primary); color: white;
+}
+
+@media (max-width: 800px) {
+  .login-page { grid-template-columns: 1fr; }
+  .login-brand { padding: 40px 28px; min-height: 260px; }
+  .login-logo { margin-bottom: 30px; }
+  .login-hero-title { font-size: 24px; }
+  .login-features { display: none; }
+  .login-form-side { padding: 32px 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="login-page">
+
+  <!-- LEFT: Brand panel -->
+  <div class="login-brand">
+    <div class="login-brand-inner">
+      <div class="login-logo">
+        <div class="login-logo-mark">L</div>
+        <div class="login-logo-text">LedgerPro</div>
+      </div>
+      <div class="login-hero-title">
+        Simple accounting for Indian small businesses.
+      </div>
+      <div class="login-hero-sub">
+        Invoicing, expenses, GST, and financial reports —
+        all in one place, all in your browser.
+      </div>
+      <div class="login-features">
+        <div class="login-feature">
+          <div class="login-feature-icon">✓</div>
+          <span>Double-entry accounting</span>
+        </div>
+        <div class="login-feature">
+          <div class="login-feature-icon">✓</div>
+          <span>GST-ready invoicing</span>
+        </div>
+        <div class="login-feature">
+          <div class="login-feature-icon">✓</div>
+          <span>Profit &amp; Loss, Balance Sheet, Trial Balance</span>
+        </div>
+        <div class="login-feature">
+          <div class="login-feature-icon">✓</div>
+          <span>Works offline, no monthly fees</span>
+        </div>
+      </div>
+    </div>
+    <div class="login-footer">
+      v0.1.0 · Stage 1 MVP · Data stored locally in your browser
+    </div>
+  </div>
+
+  <!-- RIGHT: Form panel -->
+  <div class="login-form-side">
+    <div class="login-form-wrap">
+
+      <!-- FIRST-TIME VIEW -->
+      <div id="firstTimeView" class="hidden">
+        <div class="login-form-title">Welcome to LedgerPro</div>
+        <div class="login-form-sub">Let's set up your first company.</div>
+
+        <div class="alert alert-info">
+          <span>💡</span>
+          <span>All data is stored locally in your browser. Nothing is uploaded anywhere.</span>
+        </div>
+
+        <form id="setupForm" autocomplete="off">
+          <div class="form-group">
+            <label class="form-label">Business name <span class="req">*</span></label>
+            <input type="text" id="bizName" class="input" placeholder="e.g. ABC Traders" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Business type</label>
+              <select id="bizType" class="select">
+                <option value="retail">Retail / Shop</option>
+                <option value="service">Service / Freelancer</option>
+                <option value="trading">Trading / Distribution</option>
+                <option value="manufacturing">Manufacturing</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Financial year</label>
+              <select id="finYear" class="select">
+                <option value="2025-2026">2025 – 2026</option>
+                <option value="2026-2027" selected>2026 – 2027</option>
+                <option value="2027-2028">2027 – 2028</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Currency</label>
+              <select id="currency" class="select">
+                <option value="INR" selected>INR — Indian Rupee (₹)</option>
+                <option value="USD">USD — US Dollar ($)</option>
+                <option value="EUR">EUR — Euro (€)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">GSTIN (optional)</label>
+              <input type="text" id="gstin" class="input" placeholder="29ABCDE1234F1Z5"
+                maxlength="15" style="text-transform:uppercase">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width:100%; margin-top:8px">
+            Create Company &amp; Continue →
+          </button>
+        </form>
+
+        <div class="login-form-hint">
+          You can change any of these later in <code>Settings</code>.
+        </div>
+      </div>
+
+      <!-- RETURNING VIEW -->
+      <div id="returningView" class="hidden">
+        <div class="login-form-title">Welcome back</div>
+        <div class="login-form-sub">Select a company to continue.</div>
+
+        <div id="companyList" class="login-company-list"></div>
+
+        <button id="continueBtn" class="btn btn-primary btn-lg" style="width:100%">
+          Open Dashboard →
+        </button>
+
+        <div style="text-align:center; margin-top:16px">
+          <button id="newCompanyBtn" class="btn btn-ghost">
+            + Create a new company
+          </button>
+        </div>
+      </div>
+
+      <!-- LOADING -->
+      <div id="loadingView" style="text-align:center; padding:40px 0">
+        <div style="font-size:32px; margin-bottom:12px; opacity:0.4">⏳</div>
+        <div style="color:var(--text-3); font-size:13px">Loading…</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   IndexedDB bootstrap
+   ============================================================ */
+const DB_NAME = 'ledgerpro';
+const DB_VERSION = 1;
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onerror = () => reject(req.error);
+    req.onsuccess = () => resolve(req.result);
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('companies')) {
+        const store = db.createObjectStore('companies', {
+          keyPath: 'id', autoIncrement: true
+        });
+        store.createIndex('name', 'name', { unique: false });
+      }
+    };
+  });
+}
+
+async function getAllCompanies() {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('companies', 'readonly');
+    const req = tx.objectStore('companies').getAll();
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function addCompany(company) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('companies', 'readwrite');
+    const req = tx.objectStore('companies').add(company);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+/* ============================================================
+   UI flow
+   ============================================================ */
+const views = {
+  first:     document.getElementById('firstTimeView'),
+  returning: document.getElementById('returningView'),
+  loading:   document.getElementById('loadingView')
+};
+
+function showView(name) {
+  Object.values(views).forEach(v => v.classList.add('hidden'));
+  views[name].classList.remove('hidden');
+}
+
+let selectedCompanyId = null;
+
+async function init() {
+  showView('loading');
+  try {
+    const companies = await getAllCompanies();
+
+    if (companies.length === 0) {
+      // First time — show setup form
+      showView('first');
+      document.getElementById('bizName').focus();
+    } else {
+      // Returning — show company list
+      renderCompanyList(companies);
+      showView('returning');
+    }
+  } catch (e) {
+    console.error('Init failed:', e);
+    showView('first');
+  }
+}
+
+function renderCompanyList(companies) {
+  const list = document.getElementById('companyList');
+  list.innerHTML = '';
+  selectedCompanyId = companies[0].id; // default first
+
+  companies.forEach((c, i) => {
+    const el = document.createElement('div');
+    el.className = 'login-company-item' + (i === 0 ? ' selected' : '');
+    el.dataset.id = c.id;
+    el.innerHTML = `
+      <div>
+        <div class="login-company-name">${escapeHtml(c.name)}</div>
+        <div class="login-company-meta">${c.currency} · FY ${c.financialYear}</div>
+      </div>
+      <div class="login-company-check">✓</div>
+    `;
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.login-company-item')
+        .forEach(x => x.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedCompanyId = c.id;
+    });
+    list.appendChild(el);
+  });
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, ch => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[ch]));
+}
+
+/* ============================================================
+   Event handlers
+   ============================================================ */
+document.getElementById('setupForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById('bizName').value.trim();
+  if (!name) {
+    alert('Please enter a business name');
+    return;
+  }
+
+  const company = {
+    name,
+    type: document.getElementById('bizType').value,
+    financialYear: document.getElementById('finYear').value,
+    currency: document.getElementById('currency').value,
+    gstin: document.getElementById('gstin').value.trim().toUpperCase(),
+    createdAt: new Date().toISOString()
+  };
+
+  try {
+    const id = await addCompany(company);
+    // Save as active company
+    localStorage.setItem('ledgerpro.activeCompanyId', String(id));
+    // Redirect
+    window.location.href = 'dashboard.html';
+  } catch (err) {
+    console.error('Save failed:', err);
+    alert('Could not save company. Please try again.');
+  }
+});
+
+document.getElementById('continueBtn').addEventListener('click', () => {
+  if (!selectedCompanyId) {
+    alert('Please select a company');
+    return;
+  }
+  localStorage.setItem('ledgerpro.activeCompanyId', String(selectedCompanyId));
+  window.location.href = 'dashboard.html';
+});
+
+document.getElementById('newCompanyBtn').addEventListener('click', () => {
+  showView('first');
+  document.getElementById('bizName').focus();
+});
+
+/* ============================================================
+   Boot
+   ============================================================ */
+init();
+</script>
+
+</body>
+</html>
