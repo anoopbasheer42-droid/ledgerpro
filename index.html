@@ -3,47 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LedgerPro - Complete Accounting</title>
+    <title>LedgerPro - Cloud Accounting</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #1e3a8a; /* Deep Blue */
-            --primary-light: #3b82f6;
-            --bg: #f1f5f9;
-            --sidebar-bg: #0f172a;
-            --sidebar-text: #94a3b8;
-            --sidebar-active: #1e293b;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --sidebar-bg: #1e293b;
+            --sidebar-hover: #334155;
+            --sidebar-active: #0f172a;
+            --bg: #f8fafc;
             --card-bg: #ffffff;
             --text: #1e293b;
             --text-muted: #64748b;
-            --border: #cbd5e1;
-            --danger: #ef4444;
+            --border: #e2e8f0;
             --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
 
         body { background-color: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
 
-        /* Sidebar Navigation */
+        /* --- SIDEBAR --- */
         #sidebar {
             width: 260px; background-color: var(--sidebar-bg); color: white;
-            display: flex; flex-direction: column; flex-shrink: 0;
+            display: flex; flex-direction: column; flex-shrink: 0; transition: 0.3s;
         }
-        #sidebar-header { padding: 20px; border-bottom: 1px solid #334155; }
-        #sidebar-header h2 { font-size: 20px; color: white; }
-        #sidebar-header p { font-size: 12px; color: var(--sidebar-text); margin-top: 4px; }
+        .brand { padding: 20px; font-size: 20px; font-weight: bold; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #334155; }
+        .brand i { color: var(--primary); }
         
         .nav-menu { list-style: none; padding: 15px 0; overflow-y: auto; flex: 1; }
-        .nav-menu li { padding: 12px 20px; cursor: pointer; color: var(--sidebar-text); transition: 0.2s; font-size: 15px; display: flex; align-items: center; gap: 10px; }
-        .nav-menu li:hover { background-color: var(--sidebar-active); color: white; }
+        .nav-section { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; padding: 15px 20px 5px; }
+        .nav-menu li { padding: 12px 20px; cursor: pointer; color: #cbd5e1; transition: 0.2s; font-size: 14px; display: flex; align-items: center; gap: 12px; }
+        .nav-menu li:hover { background-color: var(--sidebar-hover); color: white; }
         .nav-menu li.active { background-color: var(--primary); color: white; border-left: 4px solid white; }
-        .nav-section { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #475569; padding: 15px 20px 5px; margin-top: 10px; }
+        .nav-menu li i { width: 20px; text-align: center; }
 
-        /* Main Content */
+        /* --- MAIN CONTENT --- */
         #main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        #topbar { background: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-        #topbar h1 { font-size: 18px; color: var(--primary); }
-        #topbar .company-info { font-size: 14px; color: var(--text-muted); }
+        #topbar { background: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); box-shadow: 0 1px 2px rgba(0,0,0,0.05); z-index: 10; }
+        #topbar h1 { font-size: 18px; color: var(--text); }
+        .user-profile { display: flex; align-items: center; gap: 15px; font-size: 14px; color: var(--text-muted); }
+        .user-profile i { font-size: 20px; color: var(--primary); }
 
         .view-container { flex: 1; overflow-y: auto; padding: 30px; }
         .view { display: none; animation: fadeIn 0.3s ease; }
@@ -51,285 +55,418 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Cards & Grids */
-        .card { background: var(--card-bg); border-radius: 10px; padding: 25px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .card-header h2 { font-size: 18px; color: var(--primary); }
+        /* --- CARDS & GRIDS --- */
+        .card { background: var(--card-bg); border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; border: 1px solid var(--border); }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
+        .card-header h2 { font-size: 16px; color: var(--text); font-weight: 600; }
         
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .stat-box { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .stat-box h3 { font-size: 13px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
-        .stat-box p { font-size: 24px; font-weight: bold; color: var(--text); }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .stat-box { background: white; padding: 20px; border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.05); cursor: pointer; transition: 0.2s; }
+        .stat-box:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-color: var(--primary); }
+        .stat-box h3 { font-size: 13px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; font-weight: 600; }
+        .stat-box p { font-size: 22px; font-weight: bold; color: var(--text); }
+        .stat-box .sub-text { font-size: 12px; color: var(--text-muted); margin-top: 5px; }
 
-        /* Tables */
+        /* --- TABLES --- */
         .table-responsive { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        table { width: 100%; border-collapse: collapse; }
         th, td { text-align: left; padding: 12px 15px; border-bottom: 1px solid var(--border); font-size: 14px; }
-        th { background-color: #f8fafc; color: var(--text-muted); font-weight: 600; }
-        tr:hover { background-color: #f8fafc; }
-
-        /* Forms & Modals */
+        th { background-color: #f8fafc; color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; }
+        tr:hover { background-color: #f1f5f9; }
+        
+        /* --- FORMS & MODALS --- */
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 14px; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 13px; color: var(--text); }
         .form-group input, .form-group select, .form-group textarea {
             width: 100%; padding: 10px 12px; border: 1px solid var(--border);
-            border-radius: 6px; font-size: 14px; outline: none; transition: 0.2s;
+            border-radius: 6px; font-size: 14px; outline: none; transition: 0.2s; font-family: inherit;
         }
-        .form-group input:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(30,58,138,0.1); }
+        .form-group input:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
 
-        .btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; transition: 0.2s; }
-        .btn:hover { background: #152c6e; }
+        .btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn:hover { background: var(--primary-hover); }
         .btn-danger { background: var(--danger); }
         .btn-danger:hover { background: #b91c1c; }
-        .btn-secondary { background: var(--text-muted); }
-        .btn-secondary:hover { background: #475569; }
-        .btn-sm { padding: 6px 12px; font-size: 12px; }
+        .btn-secondary { background: white; color: var(--text); border: 1px solid var(--border); }
+        .btn-secondary:hover { background: #f1f5f9; }
+        .btn-sm { padding: 5px 10px; font-size: 12px; }
+        .btn-block { width: 100%; justify-content: center; }
 
-        /* Modal */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
         .modal-overlay.active { display: flex; }
-        .modal-content { background: white; padding: 30px; border-radius: 10px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; }
+        .modal-content { background: white; padding: 25px; border-radius: 8px; width: 100%; max-width: 700px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .modal-header h2 { font-size: 18px; color: var(--primary); }
+        .close-modal { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); }
 
-        .empty-state { text-align: center; padding: 40px; color: var(--text-muted); font-style: italic; }
-        
+        /* --- BADGES --- */
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-danger { background: #fee2e2; color: #991b1b; }
+        .badge-info { background: #dbeafe; color: #1e40af; }
+
+        /* Floating Action Button */
+        .fab { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 24px; box-shadow: 0 4px 10px rgba(37,99,235,0.4); cursor: pointer; display: flex; justify-content: center; align-items: center; z-index: 900; transition: 0.2s; }
+        .fab:hover { transform: scale(1.1); background: var(--primary-hover); }
+        .fab-menu { position: fixed; bottom: 100px; right: 30px; display: none; flex-direction: column; gap: 10px; z-index: 900; }
+        .fab-menu.active { display: flex; }
+        .fab-menu button { background: white; border: 1px solid var(--border); padding: 10px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer; text-align: left; font-size: 14px; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
+        .fab-menu button:hover { background: var(--bg); }
+
         @media (max-width: 768px) {
-            body { flex-direction: column; }
-            #sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; }
-            .nav-menu { display: flex; padding: 0; }
-            .nav-menu li { padding: 15px; white-space: nowrap; }
-            .nav-section { display: none; }
-            .form-row { grid-template-columns: 1fr; }
+            #sidebar { width: 60px; }
+            .brand span, .nav-section, .nav-menu li span { display: none; }
+            .nav-menu li { justify-content: center; padding: 15px 0; }
+            .form-row, .form-row-3 { grid-template-columns: 1fr; }
+            .view-container { padding: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR NAVIGATION -->
+    <!-- SIDEBAR -->
     <div id="sidebar">
-        <div id="sidebar-header">
-            <h2>LedgerPro</h2>
-            <p id="sidebar-company-name">No Company Setup</p>
+        <div class="brand">
+            <i class="fas fa-book-reader"></i>
+            <span>LedgerPro</span>
         </div>
-        <ul class="nav-menu" id="nav-menu">
-            <li data-view="setup-view" class="active" onclick="showView('setup-view')">⚙️ Company Setup</li>
+        <ul class="nav-menu">
+            <li class="active" onclick="showView('dashboard-view')"><i class="fas fa-chart-pie"></i> <span>Dashboard</span></li>
             
             <div class="nav-section">Masters</div>
-            <li data-view="accounts-view" onclick="showView('accounts-view')">📒 Chart of Accounts</li>
-            <li data-view="parties-view" onclick="showView('parties-view')">👥 Parties (Customers/Suppliers)</li>
-            <li data-view="items-view" onclick="showView('items-view')">📦 Items & Inventory</li>
+            <li onclick="showView('customers-view')"><i class="fas fa-users"></i> <span>Customers</span></li>
+            <li onclick="showView('suppliers-view')"><i class="fas fa-truck"></i> <span>Suppliers</span></li>
+            <li onclick="showView('items-view')"><i class="fas fa-box"></i> <span>Items & Inventory</span></li>
             
             <div class="nav-section">Transactions</div>
-            <li data-view="vouchers-view" onclick="showView('vouchers-view')">🧾 Vouchers & Entries</li>
+            <li onclick="showView('invoices-view')"><i class="fas fa-file-invoice"></i> <span>Invoices</span></li>
+            <li onclick="showView('expenses-view')"><i class="fas fa-receipt"></i> <span>Expenses</span></li>
+            <li onclick="showView('payments-view')"><i class="fas fa-money-bill-wave"></i> <span>Payments</span></li>
+            
+            <div class="nav-section">Accounting</div>
+            <li onclick="showView('accounts-view')"><i class="fas fa-sitemap"></i> <span>Chart of Accounts</span></li>
+            <li onclick="showView('journal-view')"><i class="fas fa-book"></i> <span>Journal Entries</span></li>
             
             <div class="nav-section">Reports</div>
-            <li data-view="dashboard-view" onclick="showView('dashboard-view')">📊 Dashboard</li>
-            <li data-view="trial-balance-view" onclick="showView('trial-balance-view')">⚖️ Trial Balance</li>
+            <li onclick="showView('trial-balance-view')"><i class="fas fa-balance-scale"></i> <span>Trial Balance</span></li>
+            <li onclick="showView('pnl-view')"><i class="fas fa-chart-line"></i> <span>Profit & Loss</span></li>
+            <li onclick="showView('balance-sheet-view')"><i class="fas fa-file-invoice-dollar"></i> <span>Balance Sheet</span></li>
+            
+            <div class="nav-section">System</div>
+            <li onclick="showView('setup-view')"><i class="fas fa-cog"></i> <span>Company Setup</span></li>
+            <li onclick="resetApp()" style="color: #fca5a5;"><i class="fas fa-trash-alt"></i> <span>Reset Data</span></li>
         </ul>
     </div>
 
     <!-- MAIN CONTENT -->
     <div id="main-content">
         <div id="topbar">
-            <h1 id="page-title">Company Setup</h1>
-            <div class="company-info" id="topbar-company-info">Currency: -- | FY: --</div>
+            <h1 id="page-title">Dashboard</h1>
+            <div class="user-profile">
+                <i class="fas fa-user-circle"></i>
+                <span id="topbar-company-name">Demo Company</span>
+            </div>
         </div>
 
         <div class="view-container">
-            <!-- 1. COMPANY SETUP VIEW -->
-            <div id="setup-view" class="view active">
-                <div class="card">
-                    <div class="card-header"><h2>Company Setup</h2></div>
-                    <form id="setup-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Company Name *</label>
-                                <input type="text" id="company-name" placeholder="e.g., Acme Corp" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Currency *</label>
-                                <select id="company-currency">
-                                    <option value="INR">INR — ₹ Indian Rupee</option>
-                                    <option value="USD">USD — $ US Dollar</option>
-                                    <option value="EUR">EUR — € Euro</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>GSTIN (Optional)</label>
-                                <input type="text" id="company-gstin" placeholder="29ABCDE1234F1Z5">
-                            </div>
-                            <div class="form-group">
-                                <label>Financial Year *</label>
-                                <select id="company-fy">
-                                    <option value="2024-2025">2024-2025</option>
-                                    <option value="2025-2026">2025-2026</option>
-                                    <option value="2026-2027">2026-2027</option>
-                                </select>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn">Save Company & Continue</button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- 2. DASHBOARD VIEW -->
-            <div id="dashboard-view" class="view">
+            <!-- 1. DASHBOARD VIEW -->
+            <div id="dashboard-view" class="view active">
                 <div class="stats-grid">
-                    <div class="stat-box"><h3>Total Sales</h3><p id="dash-sales">₹0.00</p></div>
-                    <div class="stat-box"><h3>Total Purchases</h3><p id="dash-purchases">₹0.00</p></div>
-                    <div class="stat-box"><h3>Total Expenses</h3><p id="dash-expenses">₹0.00</p></div>
-                    <div class="stat-box" style="border-left-color: var(--success);"><h3>Net Profit</h3><p id="dash-profit">₹0.00</p></div>
-                </div>
-                <div class="card">
-                    <div class="card-header"><h2>Recent Transactions</h2></div>
-                    <div class="table-responsive">
-                        <table id="dash-transactions-table">
-                            <thead><tr><th>Date</th><th>Type</th><th>Party</th><th>Amount</th></tr></thead>
-                            <tbody id="dash-transactions-body"></tbody>
-                        </table>
-                        <div id="dash-transactions-empty" class="empty-state">No transactions recorded yet.</div>
+                    <div class="stat-box" onclick="showView('invoices-view')">
+                        <h3>Total Receivables</h3>
+                        <p id="dash-receivables">₹0.00</p>
+                        <div class="sub-text">Money customers owe you</div>
+                    </div>
+                    <div class="stat-box" onclick="showView('suppliers-view')">
+                        <h3>Total Payables</h3>
+                        <p id="dash-payables">₹0.00</p>
+                        <div class="sub-text">Money you owe suppliers</div>
+                    </div>
+                    <div class="stat-box" onclick="showView('accounts-view')">
+                        <h3>Cash & Bank</h3>
+                        <p id="dash-cash">₹0.00</p>
+                        <div class="sub-text">Available balance</div>
+                    </div>
+                    <div class="stat-box" onclick="showView('pnl-view')">
+                        <h3>Revenue</h3>
+                        <p id="dash-revenue">₹0.00</p>
+                        <div class="sub-text">Total sales</div>
+                    </div>
+                    <div class="stat-box" onclick="showView('expenses-view')">
+                        <h3>Expenses</h3>
+                        <p id="dash-expenses">₹0.00</p>
+                        <div class="sub-text">Business expenses</div>
+                    </div>
+                    <div class="stat-box" onclick="showView('pnl-view')" style="border-left: 4px solid var(--success);">
+                        <h3>Net Profit</h3>
+                        <p id="dash-profit" style="color: var(--success);">₹0.00</p>
+                        <div class="sub-text">Revenue - Expenses</div>
                     </div>
                 </div>
-            </div>
 
-            <!-- 3. ACCOUNTS VIEW -->
-            <div id="accounts-view" class="view">
-                <div class="card">
-                    <div class="card-header">
-                        <h2>Chart of Accounts</h2>
-                        <button class="btn" onclick="openModal('account-modal')">+ New Account</button>
-                    </div>
-                    <div class="table-responsive">
-                        <table id="accounts-table">
-                            <thead><tr><th>Account Name</th><th>Group</th><th>Type</th><th>Balance</th></tr></thead>
-                            <tbody id="accounts-body"></tbody>
-                        </table>
-                        <div id="accounts-empty" class="empty-state">No accounts created yet.</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 4. PARTIES VIEW -->
-            <div id="parties-view" class="view">
                 <div class="card">
                     <div class="card-header">
-                        <h2>Parties (Customers & Suppliers)</h2>
-                        <button class="btn" onclick="openModal('party-modal')">+ New Party</button>
+                        <h2>Recent Transactions</h2>
+                        <button class="btn btn-secondary btn-sm" onclick="showView('journal-view')">View All</button>
                     </div>
                     <div class="table-responsive">
-                        <table id="parties-table">
-                            <thead><tr><th>Name</th><th>Type</th><th>GSTIN</th><th>Phone</th></tr></thead>
-                            <tbody id="parties-body"></tbody>
+                        <table>
+                            <thead><tr><th>Date</th><th>Type</th><th>Reference</th><th>Amount</th><th>Status</th></tr></thead>
+                            <tbody id="dash-recent-tbody"></tbody>
                         </table>
-                        <div id="parties-empty" class="empty-state">No parties added yet.</div>
                     </div>
                 </div>
             </div>
 
-            <!-- 5. ITEMS VIEW -->
+            <!-- 2. CUSTOMERS VIEW -->
+            <div id="customers-view" class="view">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Customers</h2>
+                        <button class="btn" onclick="openModal('customer-modal')"><i class="fas fa-plus"></i> New Customer</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Outstanding</th><th>Actions</th></tr></thead>
+                            <tbody id="customers-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. SUPPLIERS VIEW -->
+            <div id="suppliers-view" class="view">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Suppliers</h2>
+                        <button class="btn" onclick="openModal('supplier-modal')"><i class="fas fa-plus"></i> New Supplier</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Payable</th></tr></thead>
+                            <tbody id="suppliers-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. ITEMS VIEW -->
             <div id="items-view" class="view">
                 <div class="card">
                     <div class="card-header">
                         <h2>Items & Inventory</h2>
-                        <button class="btn" onclick="openModal('item-modal')">+ New Item</button>
+                        <button class="btn" onclick="openModal('item-modal')"><i class="fas fa-plus"></i> New Item</button>
                     </div>
                     <div class="table-responsive">
-                        <table id="items-table">
-                            <thead><tr><th>Name</th><th>SKU</th><th>HSN</th><th>Type</th><th>Price</th></tr></thead>
-                            <tbody id="items-body"></tbody>
+                        <table>
+                            <thead><tr><th>Name</th><th>SKU</th><th>Type</th><th>Sale Price</th><th>Stock</th></tr></thead>
+                            <tbody id="items-tbody"></tbody>
                         </table>
-                        <div id="items-empty" class="empty-state">No items added yet.</div>
                     </div>
                 </div>
             </div>
 
-            <!-- 6. VOUCHERS VIEW -->
-            <div id="vouchers-view" class="view">
+            <!-- 5. INVOICES VIEW -->
+            <div id="invoices-view" class="view">
                 <div class="card">
                     <div class="card-header">
-                        <h2>Vouchers & Entries</h2>
-                        <button class="btn" onclick="openModal('voucher-modal')">+ New Voucher</button>
+                        <h2>Invoices</h2>
+                        <button class="btn" onclick="openModal('invoice-modal')"><i class="fas fa-plus"></i> Create Invoice</button>
                     </div>
                     <div class="table-responsive">
-                        <table id="vouchers-table">
-                            <thead><tr><th>Date</th><th>Type</th><th>Party/Account</th><th>Amount</th><th>Narration</th></tr></thead>
-                            <tbody id="vouchers-body"></tbody>
+                        <table>
+                            <thead><tr><th>Invoice #</th><th>Customer</th><th>Date</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody id="invoices-tbody"></tbody>
                         </table>
-                        <div id="vouchers-empty" class="empty-state">No vouchers recorded yet.</div>
                     </div>
                 </div>
             </div>
 
-            <!-- 7. TRIAL BALANCE VIEW -->
+            <!-- 6. EXPENSES VIEW -->
+            <div id="expenses-view" class="view">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Expenses</h2>
+                        <button class="btn" onclick="openModal('expense-modal')"><i class="fas fa-plus"></i> Record Expense</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Date</th><th>Category</th><th>Payee</th><th>Amount</th><th>Payment Account</th></tr></thead>
+                            <tbody id="expenses-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. PAYMENTS VIEW -->
+            <div id="payments-view" class="view">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Payments</h2>
+                        <button class="btn" onclick="openModal('payment-modal')"><i class="fas fa-plus"></i> Record Payment</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Date</th><th>Type</th><th>Reference</th><th>Amount</th><th>Account</th></tr></thead>
+                            <tbody id="payments-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. CHART OF ACCOUNTS VIEW -->
+            <div id="accounts-view" class="view">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Chart of Accounts</h2>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Code</th><th>Account Name</th><th>Type</th><th>Balance</th></tr></thead>
+                            <tbody id="accounts-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. JOURNAL ENTRIES VIEW -->
+            <div id="journal-view" class="view">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Journal Entries</h2>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Date</th><th>Reference</th><th>Description</th><th>Debit</th><th>Credit</th></tr></thead>
+                            <tbody id="journal-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10. TRIAL BALANCE VIEW -->
             <div id="trial-balance-view" class="view">
                 <div class="card">
                     <div class="card-header"><h2>Trial Balance</h2></div>
                     <div class="table-responsive">
-                        <table id="tb-table">
+                        <table>
                             <thead><tr><th>Account</th><th>Debit (Dr)</th><th>Credit (Cr)</th></tr></thead>
-                            <tbody id="tb-body"></tbody>
+                            <tbody id="tb-tbody"></tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+
+            <!-- 11. PROFIT & LOSS VIEW -->
+            <div id="pnl-view" class="view">
+                <div class="card">
+                    <div class="card-header"><h2>Profit & Loss Statement</h2></div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Particulars</th><th>Amount</th></tr></thead>
+                            <tbody id="pnl-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 12. BALANCE SHEET VIEW -->
+            <div id="balance-sheet-view" class="view">
+                <div class="card">
+                    <div class="card-header"><h2>Balance Sheet</h2></div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr><th>Particulars</th><th>Amount</th></tr></thead>
+                            <tbody id="bs-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 13. COMPANY SETUP VIEW -->
+            <div id="setup-view" class="view">
+                <div class="card">
+                    <div class="card-header"><h2>Company Setup</h2></div>
+                    <form id="setup-form">
+                        <div class="form-row">
+                            <div class="form-group"><label>Company Name</label><input type="text" id="setup-name" required></div>
+                            <div class="form-group"><label>Currency</label>
+                                <select id="setup-currency">
+                                    <option value="INR">INR (₹)</option>
+                                    <option value="USD">USD ($)</option>
+                                    <option value="EUR">EUR (€)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Financial Year</label>
+                                <select id="setup-fy">
+                                    <option value="2024-2025">2024-2025</option>
+                                    <option value="2025-2026">2025-2026</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><label>GSTIN (Optional)</label><input type="text" id="setup-gstin"></div>
+                        </div>
+                        <button type="submit" class="btn">Save Setup</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODALS -->
-    <!-- Account Modal -->
-    <div id="account-modal" class="modal-overlay">
+    <!-- FLOATING ACTION BUTTON -->
+    <button class="fab" onclick="toggleFabMenu()"><i class="fas fa-plus"></i></button>
+    <div class="fab-menu" id="fab-menu">
+        <button onclick="openModal('invoice-modal')"><i class="fas fa-file-invoice" style="color: var(--primary);"></i> Create Invoice</button>
+        <button onclick="openModal('expense-modal')"><i class="fas fa-receipt" style="color: var(--danger);"></i> Record Expense</button>
+        <button onclick="openModal('customer-modal')"><i class="fas fa-user-plus" style="color: var(--success);"></i> Add Customer</button>
+        <button onclick="openModal('payment-modal')"><i class="fas fa-money-bill-wave" style="color: var(--warning);"></i> Record Payment</button>
+    </div>
+
+    <!-- --- MODALS --- -->
+    
+    <!-- Customer Modal -->
+    <div id="customer-modal" class="modal-overlay">
         <div class="modal-content">
-            <h2 style="margin-bottom: 20px;">Add New Account</h2>
-            <form id="account-form">
-                <div class="form-group"><label>Account Name *</label><input type="text" id="acc-name" required></div>
+            <div class="modal-header"><h2>Add New Customer</h2><button class="close-modal" onclick="closeModal('customer-modal')">&times;</button></div>
+            <form id="customer-form">
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>Group *</label>
-                        <select id="acc-group" required>
-                            <option value="Asset">Asset</option>
-                            <option value="Liability">Liability</option>
-                            <option value="Income">Income</option>
-                            <option value="Expense">Expense</option>
-                            <option value="Equity">Equity</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Opening Balance</label>
-                        <input type="number" id="acc-balance" value="0">
-                    </div>
+                    <div class="form-group"><label>Customer Name *</label><input type="text" id="cust-name" required></div>
+                    <div class="form-group"><label>Email</label><input type="email" id="cust-email"></div>
                 </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Phone</label><input type="text" id="cust-phone"></div>
+                    <div class="form-group"><label>GSTIN</label><input type="text" id="cust-gstin"></div>
+                </div>
+                <div class="form-group"><label>Opening Balance (Receivable)</label><input type="number" id="cust-balance" value="0"></div>
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button type="button" class="btn btn-secondary" onclick="closeModal('account-modal')" style="flex: 1;">Cancel</button>
-                    <button type="submit" class="btn" style="flex: 2;">Save Account</button>
+                    <button type="button" class="btn btn-secondary btn-block" onclick="closeModal('customer-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-block">Save Customer</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Party Modal -->
-    <div id="party-modal" class="modal-overlay">
+    <!-- Supplier Modal -->
+    <div id="supplier-modal" class="modal-overlay">
         <div class="modal-content">
-            <h2 style="margin-bottom: 20px;">Add New Party</h2>
-            <form id="party-form">
+            <div class="modal-header"><h2>Add New Supplier</h2><button class="close-modal" onclick="closeModal('supplier-modal')">&times;</button></div>
+            <form id="supplier-form">
                 <div class="form-row">
-                    <div class="form-group"><label>Name *</label><input type="text" id="party-name" required></div>
-                    <div class="form-group">
-                        <label>Type *</label>
-                        <select id="party-type" required>
-                            <option value="Customer">Customer</option>
-                            <option value="Supplier">Supplier</option>
-                        </select>
-                    </div>
+                    <div class="form-group"><label>Supplier Name *</label><input type="text" id="sup-name" required></div>
+                    <div class="form-group"><label>Email</label><input type="email" id="sup-email"></div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group"><label>GSTIN</label><input type="text" id="party-gstin"></div>
-                    <div class="form-group"><label>Phone</label><input type="text" id="party-phone"></div>
+                    <div class="form-group"><label>Phone</label><input type="text" id="sup-phone"></div>
+                    <div class="form-group"><label>GSTIN</label><input type="text" id="sup-gstin"></div>
                 </div>
+                <div class="form-group"><label>Opening Balance (Payable)</label><input type="number" id="sup-balance" value="0"></div>
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button type="button" class="btn btn-secondary" onclick="closeModal('party-modal')" style="flex: 1;">Cancel</button>
-                    <button type="submit" class="btn" style="flex: 2;">Save Party</button>
+                    <button type="button" class="btn btn-secondary btn-block" onclick="closeModal('supplier-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-block">Save Supplier</button>
                 </div>
             </form>
         </div>
@@ -338,101 +475,191 @@
     <!-- Item Modal -->
     <div id="item-modal" class="modal-overlay">
         <div class="modal-content">
-            <h2 style="margin-bottom: 20px;">Add New Item</h2>
+            <div class="modal-header"><h2>Add New Item</h2><button class="close-modal" onclick="closeModal('item-modal')">&times;</button></div>
             <form id="item-form">
                 <div class="form-row">
                     <div class="form-group"><label>Item Name *</label><input type="text" id="item-name" required></div>
-                    <div class="form-group">
-                        <label>Type *</label>
-                        <select id="item-type" required>
-                            <option value="Product">Product</option>
-                            <option value="Service">Service</option>
-                        </select>
+                    <div class="form-group"><label>Type</label>
+                        <select id="item-type"><option value="Product">Product</option><option value="Service">Service</option></select>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group"><label>SKU</label><input type="text" id="item-sku"></div>
-                    <div class="form-group"><label>HSN</label><input type="text" id="item-hsn"></div>
+                    <div class="form-group"><label>HSN/SAC</label><input type="text" id="item-hsn"></div>
                 </div>
-                <div class="form-row">
+                <div class="form-row-3">
                     <div class="form-group"><label>Sale Price *</label><input type="number" id="item-price" required></div>
                     <div class="form-group"><label>Purchase Cost</label><input type="number" id="item-cost"></div>
+                    <div class="form-group"><label>Opening Stock</label><input type="number" id="item-stock" value="0"></div>
                 </div>
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button type="button" class="btn btn-secondary" onclick="closeModal('item-modal')" style="flex: 1;">Cancel</button>
-                    <button type="submit" class="btn" style="flex: 2;">Save Item</button>
+                    <button type="button" class="btn btn-secondary btn-block" onclick="closeModal('item-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-block">Save Item</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Voucher Modal -->
-    <div id="voucher-modal" class="modal-overlay">
+    <!-- Invoice Modal -->
+    <div id="invoice-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header"><h2>Create New Invoice</h2><button class="close-modal" onclick="closeModal('invoice-modal')">&times;</button></div>
+            <form id="invoice-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Customer *</label>
+                        <select id="inv-customer" required></select>
+                    </div>
+                    <div class="form-group"><label>Invoice Date *</label><input type="date" id="inv-date" required></div>
+                </div>
+                
+                <div style="background: #f8fafc; padding: 15px; border-radius: 6px; margin-bottom: 15px; border: 1px solid var(--border);">
+                    <h4 style="margin-bottom: 10px; font-size: 14px;">Line Items</h4>
+                    <div class="form-row-3" style="margin-bottom: 10px;">
+                        <div class="form-group" style="margin:0;"><label>Item</label><select id="inv-item"></select></div>
+                        <div class="form-group" style="margin:0;"><label>Qty</label><input type="number" id="inv-qty" value="1" min="1"></div>
+                        <div class="form-group" style="margin:0;"><label>Rate</label><input type="number" id="inv-rate" readonly></div>
+                    </div>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="addInvoiceLine()">Add Item</button>
+                    <div id="invoice-lines" style="margin-top: 15px;"></div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+                    <div style="width: 250px; text-align: right;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;"><span>Subtotal:</span> <strong id="inv-subtotal">₹0.00</strong></div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;"><span>Tax (18%):</span> <strong id="inv-tax">₹0.00</strong></div>
+                        <div style="display: flex; justify-content: space-between; font-size: 18px; margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px;"><span>Total:</span> <strong id="inv-total">₹0.00</strong></div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <button type="button" class="btn btn-secondary btn-block" onclick="closeModal('invoice-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-block">Save & Post Invoice</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Expense Modal -->
+    <div id="expense-modal" class="modal-overlay">
         <div class="modal-content">
-            <h2 style="margin-bottom: 20px;">Record New Voucher</h2>
-            <form id="voucher-form">
+            <div class="modal-header"><h2>Record Expense</h2><button class="close-modal" onclick="closeModal('expense-modal')">&times;</button></div>
+            <form id="expense-form">
                 <div class="form-row">
-                    <div class="form-group"><label>Date *</label><input type="date" id="vch-date" required></div>
-                    <div class="form-group">
-                        <label>Voucher Type *</label>
-                        <select id="vch-type" required>
-                            <option value="Sale">Sale</option>
-                            <option value="Purchase">Purchase</option>
-                            <option value="Payment">Payment</option>
-                            <option value="Receipt">Receipt</option>
-                            <option value="Expense">Expense</option>
+                    <div class="form-group"><label>Date *</label><input type="date" id="exp-date" required></div>
+                    <div class="form-group"><label>Category *</label>
+                        <select id="exp-category" required>
+                            <option value="Rent">Rent</option>
+                            <option value="Utilities">Utilities</option>
+                            <option value="Salaries">Salaries</option>
+                            <option value="Office Supplies">Office Supplies</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Other">Other</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>Party / Account *</label>
-                        <select id="vch-party" required>
-                            <option value="">Select Party or Account</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><label>Amount *</label><input type="number" id="vch-amount" required></div>
+                    <div class="form-group"><label>Payee / Supplier</label><input type="text" id="exp-payee"></div>
+                    <div class="form-group"><label>Amount *</label><input type="number" id="exp-amount" required></div>
                 </div>
-                <div class="form-group"><label>Narration / Notes</label><input type="text" id="vch-narration"></div>
+                <div class="form-group"><label>Payment Account</label>
+                    <select id="exp-account">
+                        <option value="Cash">Cash</option>
+                        <option value="Bank">Bank</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Notes</label><textarea id="exp-notes" rows="2"></textarea></div>
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button type="button" class="btn btn-secondary" onclick="closeModal('voucher-modal')" style="flex: 1;">Cancel</button>
-                    <button type="submit" class="btn" style="flex: 2;">Save Voucher</button>
+                    <button type="button" class="btn btn-secondary btn-block" onclick="closeModal('expense-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-block">Save Expense</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header"><h2>Record Payment</h2><button class="close-modal" onclick="closeModal('payment-modal')">&times;</button></div>
+            <form id="payment-form">
+                <div class="form-row">
+                    <div class="form-group"><label>Date *</label><input type="date" id="pay-date" required></div>
+                    <div class="form-group"><label>Type *</label>
+                        <select id="pay-type">
+                            <option value="Customer Payment">Customer Payment (In)</option>
+                            <option value="Supplier Payment">Supplier Payment (Out)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Reference / Invoice #</label><input type="text" id="pay-ref"></div>
+                    <div class="form-group"><label>Amount *</label><input type="number" id="pay-amount" required></div>
+                </div>
+                <div class="form-group"><label>Deposit To / Paid From</label>
+                    <select id="pay-account">
+                        <option value="Bank">Bank Account</option>
+                        <option value="Cash">Cash Account</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="button" class="btn btn-secondary btn-block" onclick="closeModal('payment-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-block">Save Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- --- JAVASCRIPT LOGIC --- -->
     <script>
-        // --- STATE MANAGEMENT ---
+        // --- INITIAL STATE & MOCK DATA ---
         let appState = {
-            company: null,
-            accounts: [],
-            parties: [],
+            company: { name: 'Demo Company', currency: 'INR', fy: '2024-2025', gstin: '' },
+            customers: [],
+            suppliers: [],
             items: [],
-            vouchers: []
+            invoices: [],
+            expenses: [],
+            payments: [],
+            journalEntries: [],
+            accounts: [
+                { code: '1000', name: 'Cash', type: 'Asset', balance: 0 },
+                { code: '1010', name: 'Bank', type: 'Asset', balance: 0 },
+                { code: '1200', name: 'Accounts Receivable', type: 'Asset', balance: 0 },
+                { code: '2000', name: 'Accounts Payable', type: 'Liability', balance: 0 },
+                { code: '3000', name: 'Sales Revenue', type: 'Income', balance: 0 },
+                { code: '4000', name: 'Expenses', type: 'Expense', balance: 0 }
+            ]
         };
 
-        // --- INITIALIZATION & STORAGE ---
-        function loadData() {
-            try {
-                const data = localStorage.getItem('ledgerProData');
-                if (data) {
-                    appState = JSON.parse(data);
-                }
-            } catch (e) {
-                console.error("Error loading data:", e);
-            }
-        }
-
+        // --- STORAGE FUNCTIONS ---
         function saveData() {
             try {
                 localStorage.setItem('ledgerProData', JSON.stringify(appState));
-                return true;
             } catch (e) {
                 console.error("Save error:", e);
-                alert(`Could not save. Please try again.\n\nReason: ${e.message}\n\nTip: If you are in Incognito mode, switch to a normal window. If storage is full, clear your browser cache.`);
-                return false;
+                alert("Could not save data. Storage might be full or blocked.");
+            }
+        }
+
+        function loadData() {
+            const data = localStorage.getItem('ledgerProData');
+            if (data) {
+                appState = JSON.parse(data);
+            } else {
+                // Seed some initial demo data if empty
+                appState.customers.push({ id: 'c1', name: 'Acme Corp', email: 'billing@acme.com', phone: '9876543210', balance: 0 });
+                appState.suppliers.push({ id: 's1', name: 'Global Supplies', email: 'sales@global.com', phone: '9123456780', balance: 0 });
+                appState.items.push({ id: 'i1', name: 'Consulting Service', type: 'Service', sku: 'CONS-01', hsn: '9983', price: 5000, cost: 0, stock: 0 });
+                appState.items.push({ id: 'i2', name: 'Wireless Mouse', type: 'Product', sku: 'WM-001', hsn: '8471', price: 800, cost: 500, stock: 50 });
+                saveData();
+            }
+            updateTopbar();
+        }
+
+        function resetApp() {
+            if (confirm("Are you sure you want to delete all data and reset the app?")) {
+                localStorage.removeItem('ledgerProData');
+                location.reload();
             }
         }
 
@@ -442,44 +669,52 @@
             document.getElementById(viewId).classList.add('active');
             
             document.querySelectorAll('.nav-menu li').forEach(li => li.classList.remove('active'));
-            const navItem = document.querySelector(`.nav-menu li[data-view="${viewId}"]`);
-            if(navItem) navItem.classList.add('active');
+            document.querySelector(`.nav-menu li[onclick="showView('${viewId}')"]`).classList.add('active');
 
-            // Update topbar title
             const titles = {
-                'setup-view': 'Company Setup',
-                'dashboard-view': 'Dashboard',
-                'accounts-view': 'Chart of Accounts',
-                'parties-view': 'Parties',
-                'items-view': 'Items & Inventory',
-                'vouchers-view': 'Vouchers & Entries',
-                'trial-balance-view': 'Trial Balance'
+                'dashboard-view': 'Dashboard', 'customers-view': 'Customers', 'suppliers-view': 'Suppliers',
+                'items-view': 'Items & Inventory', 'invoices-view': 'Invoices', 'expenses-view': 'Expenses',
+                'payments-view': 'Payments', 'accounts-view': 'Chart of Accounts', 'journal-view': 'Journal Entries',
+                'trial-balance-view': 'Trial Balance', 'pnl-view': 'Profit & Loss', 'balance-sheet-view': 'Balance Sheet',
+                'setup-view': 'Company Setup'
             };
             document.getElementById('page-title').textContent = titles[viewId] || 'LedgerPro';
-
-            // Refresh data on view change
-            if (viewId === 'dashboard-view') updateDashboard();
-            if (viewId === 'accounts-view') renderAccounts();
-            if (viewId === 'parties-view') renderParties();
+            closeFabMenu();
+            
+            // Render logic based on view
+            if (viewId === 'dashboard-view') renderDashboard();
+            if (viewId === 'customers-view') renderCustomers();
+            if (viewId === 'suppliers-view') renderSuppliers();
             if (viewId === 'items-view') renderItems();
-            if (viewId === 'vouchers-view') renderVouchers();
+            if (viewId === 'invoices-view') renderInvoices();
+            if (viewId === 'expenses-view') renderExpenses();
+            if (viewId === 'payments-view') renderPayments();
+            if (viewId === 'accounts-view') renderAccounts();
+            if (viewId === 'journal-view') renderJournal();
             if (viewId === 'trial-balance-view') renderTrialBalance();
+            if (viewId === 'pnl-view') renderPnL();
+            if (viewId === 'balance-sheet-view') renderBalanceSheet();
         }
 
-        // --- MODALS ---
+        function updateTopbar() {
+            document.getElementById('topbar-company-name').textContent = appState.company.name;
+        }
+
+        // --- MODAL LOGIC ---
         function openModal(modalId) {
-            // Populate party dropdown for vouchers
-            if (modalId === 'voucher-modal') {
-                const select = document.getElementById('vch-party');
-                select.innerHTML = '<option value="">Select Party or Account</option>';
-                appState.parties.forEach(p => {
-                    select.innerHTML += `<option value="party_${p.id}">${p.name} (${p.type})</option>`;
-                });
-                appState.accounts.forEach(a => {
-                    select.innerHTML += `<option value="acc_${a.id}">${a.name} (${a.group})</option>`;
-                });
-                // Set default date
-                document.getElementById('vch-date').valueAsDate = new Date();
+            // Populate dropdowns dynamically before opening
+            if (modalId === 'invoice-modal') {
+                const custSelect = document.getElementById('inv-customer');
+                custSelect.innerHTML = '<option value="">Select Customer</option>';
+                appState.customers.forEach(c => custSelect.innerHTML += `<option value="${c.id}">${c.name}</option>`);
+                
+                const itemSelect = document.getElementById('inv-item');
+                itemSelect.innerHTML = '<option value="">Select Item</option>';
+                appState.items.forEach(i => itemSelect.innerHTML += `<option value="${i.id}">${i.name} (₹${i.price})</option>`);
+                
+                document.getElementById('inv-date').valueAsDate = new Date();
+                document.getElementById('invoice-lines').innerHTML = '';
+                calculateInvoiceTotals();
             }
             document.getElementById(modalId).classList.add('active');
         }
@@ -489,246 +724,483 @@
             document.getElementById(modalId).querySelector('form').reset();
         }
 
+        function toggleFabMenu() {
+            document.getElementById('fab-menu').classList.toggle('active');
+        }
+        function closeFabMenu() {
+            document.getElementById('fab-menu').classList.remove('active');
+        }
+
+        // --- ACCOUNTING ENGINE (CORE LOGIC) ---
+        function postJournalEntry(date, ref, description, debitAccCode, creditAccCode, amount) {
+            const entry = {
+                id: 'je_' + Date.now(),
+                date: date,
+                reference: ref,
+                description: description,
+                lines: [
+                    { account: debitAccCode, type: 'Debit', amount: amount },
+                    { account: creditAccCode, type: 'Credit', amount: amount }
+                ]
+            };
+            appState.journalEntries.push(entry);
+
+            // Update Account Balances
+            const debitAcc = appState.accounts.find(a => a.code === debitAccCode);
+            const creditAcc = appState.accounts.find(a => a.code === creditAccCode);
+            
+            if (debitAcc) {
+                if (debitAcc.type === 'Asset' || debitAcc.type === 'Expense') debitAcc.balance += amount;
+                else debitAcc.balance -= amount; // Liability, Equity, Income
+            }
+            if (creditAcc) {
+                if (creditAcc.type === 'Asset' || creditAcc.type === 'Expense') creditAcc.balance -= amount;
+                else creditAcc.balance += amount; // Liability, Equity, Income
+            }
+        }
+
         // --- FORM HANDLERS ---
-        
-        // 1. Company Setup
         document.getElementById('setup-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            appState.company = {
-                name: document.getElementById('company-name').value,
-                currency: document.getElementById('company-currency').value,
-                gstin: document.getElementById('company-gstin').value,
-                fy: document.getElementById('company-fy').value
+            appState.company.name = document.getElementById('setup-name').value;
+            appState.company.currency = document.getElementById('setup-currency').value;
+            appState.company.fy = document.getElementById('setup-fy').value;
+            appState.company.gstin = document.getElementById('setup-gstin').value;
+            saveData();
+            updateTopbar();
+            alert("Company setup saved!");
+            showView('dashboard-view');
+        });
+
+        document.getElementById('customer-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const newCustomer = {
+                id: 'c_' + Date.now(),
+                name: document.getElementById('cust-name').value,
+                email: document.getElementById('cust-email').value,
+                phone: document.getElementById('cust-phone').value,
+                gstin: document.getElementById('cust-gstin').value,
+                balance: Number(document.getElementById('cust-balance').value)
             };
-            if (saveData()) {
-                updateTopbar();
-                showView('dashboard-view');
+            appState.customers.push(newCustomer);
+            // If opening balance > 0, it's a receivable (Asset)
+            if (newCustomer.balance > 0) {
+                postJournalEntry(new Date().toISOString().split('T')[0], 'Opening', 'Opening Balance', '1200', '3000', newCustomer.balance);
             }
+            saveData();
+            renderCustomers();
+            closeModal('customer-modal');
         });
 
-        // 2. Accounts
-        document.getElementById('account-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            appState.accounts.push({
-                id: Date.now().toString(),
-                name: document.getElementById('acc-name').value,
-                group: document.getElementById('acc-group').value,
-                balance: Number(document.getElementById('acc-balance').value)
-            });
-            if (saveData()) { renderAccounts(); closeModal('account-modal'); }
-        });
-
-        // 3. Parties
-        document.getElementById('party-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            appState.parties.push({
-                id: Date.now().toString(),
-                name: document.getElementById('party-name').value,
-                type: document.getElementById('party-type').value,
-                gstin: document.getElementById('party-gstin').value,
-                phone: document.getElementById('party-phone').value
-            });
-            if (saveData()) { renderParties(); closeModal('party-modal'); }
-        });
-
-        // 4. Items
         document.getElementById('item-form').addEventListener('submit', function(e) {
             e.preventDefault();
             appState.items.push({
-                id: Date.now().toString(),
+                id: 'i_' + Date.now(),
                 name: document.getElementById('item-name').value,
                 type: document.getElementById('item-type').value,
                 sku: document.getElementById('item-sku').value,
                 hsn: document.getElementById('item-hsn').value,
                 price: Number(document.getElementById('item-price').value),
-                cost: Number(document.getElementById('item-cost').value)
+                cost: Number(document.getElementById('item-cost').value),
+                stock: Number(document.getElementById('item-stock').value)
             });
-            if (saveData()) { renderItems(); closeModal('item-modal'); }
+            saveData();
+            renderItems();
+            closeModal('item-modal');
         });
 
-        // 5. Vouchers
-        document.getElementById('voucher-form').addEventListener('submit', function(e) {
+        document.getElementById('expense-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            const partySelect = document.getElementById('vch-party');
-            const selectedValue = partySelect.value;
-            let partyName = "Unknown";
+            const amount = Number(document.getElementById('exp-amount').value);
+            const account = document.getElementById('exp-account').value;
             
-            if(selectedValue.startsWith('party_')) {
-                const p = appState.parties.find(x => x.id === selectedValue.replace('party_', ''));
-                if(p) partyName = p.name;
-            } else if(selectedValue.startsWith('acc_')) {
-                const a = appState.accounts.find(x => x.id === selectedValue.replace('acc_', ''));
-                if(a) partyName = a.name;
+            appState.expenses.push({
+                id: 'exp_' + Date.now(),
+                date: document.getElementById('exp-date').value,
+                category: document.getElementById('exp-category').value,
+                payee: document.getElementById('exp-payee').value,
+                amount: amount,
+                account: account,
+                notes: document.getElementById('exp-notes').value
+            });
+            
+            // Accounting: Debit Expense, Credit Bank/Cash
+            const creditAcc = account === 'Cash' ? '1000' : '1010';
+            postJournalEntry(document.getElementById('exp-date').value, 'EXP-' + Date.now().toString().slice(-4), 'Expense: ' + document.getElementById('exp-category').value, '4000', creditAcc, amount);
+            
+            saveData();
+            renderExpenses();
+            closeModal('expense-modal');
+        });
+
+        document.getElementById('payment-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const amount = Number(document.getElementById('pay-amount').value);
+            const type = document.getElementById('pay-type').value;
+            const account = document.getElementById('pay-account').value;
+            const debitAcc = account === 'Cash' ? '1000' : '1010';
+
+            appState.payments.push({
+                id: 'pay_' + Date.now(),
+                date: document.getElementById('pay-date').value,
+                type: type,
+                reference: document.getElementById('pay-ref').value,
+                amount: amount,
+                account: account
+            });
+
+            // Accounting: 
+            if (type === 'Customer Payment') {
+                // Debit Bank/Cash, Credit Accounts Receivable
+                postJournalEntry(document.getElementById('pay-date').value, 'PAY-' + Date.now().toString().slice(-4), 'Payment Received', debitAcc, '1200', amount);
+            } else {
+                // Debit Accounts Payable, Credit Bank/Cash
+                postJournalEntry(document.getElementById('pay-date').value, 'PAY-' + Date.now().toString().slice(-4), 'Payment Made', '2000', debitAcc, amount);
             }
 
-            appState.vouchers.push({
-                id: Date.now().toString(),
-                date: document.getElementById('vch-date').value,
-                type: document.getElementById('vch-type').value,
-                party: partyName,
-                amount: Number(document.getElementById('vch-amount').value),
-                narration: document.getElementById('vch-narration').value
+            saveData();
+            renderPayments();
+            closeModal('payment-modal');
+        });
+
+        // --- INVOICE LOGIC ---
+        let currentInvoiceLines = [];
+        document.getElementById('inv-item').addEventListener('change', function() {
+            const item = appState.items.find(i => i.id === this.value);
+            if (item) document.getElementById('inv-rate').value = item.price;
+        });
+
+        function addInvoiceLine() {
+            const itemId = document.getElementById('inv-item').value;
+            const qty = Number(document.getElementById('inv-qty').value);
+            const rate = Number(document.getElementById('inv-rate').value);
+            
+            if (!itemId || qty <= 0) return alert("Select an item and valid quantity.");
+            
+            const item = appState.items.find(i => i.id === itemId);
+            const amount = qty * rate;
+            
+            currentInvoiceLines.push({ itemId, name: item.name, qty, rate, amount });
+            
+            const linesDiv = document.getElementById('invoice-lines');
+            linesDiv.innerHTML += `<div style="display:flex; justify-content:space-between; font-size:14px; padding:5px 0; border-bottom:1px solid #eee;">
+                <span>${item.name} (x${qty})</span>
+                <span>₹${amount.toFixed(2)}</span>
+            </div>`;
+            
+            document.getElementById('inv-item').value = '';
+            document.getElementById('inv-qty').value = 1;
+            document.getElementById('inv-rate').value = '';
+            
+            calculateInvoiceTotals();
+        }
+
+        function calculateInvoiceTotals() {
+            const subtotal = currentInvoiceLines.reduce((sum, line) => sum + line.amount, 0);
+            const tax = subtotal * 0.18; // 18% GST
+            const total = subtotal + tax;
+            
+            document.getElementById('inv-subtotal').textContent = '₹' + subtotal.toFixed(2);
+            document.getElementById('inv-tax').textContent = '₹' + tax.toFixed(2);
+            document.getElementById('inv-total').textContent = '₹' + total.toFixed(2);
+        }
+
+        document.getElementById('invoice-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (currentInvoiceLines.length === 0) return alert("Add at least one item to the invoice.");
+            
+            const subtotal = currentInvoiceLines.reduce((sum, line) => sum + line.amount, 0);
+            const tax = subtotal * 0.18;
+            const total = subtotal + tax;
+            const customerId = document.getElementById('inv-customer').value;
+            const customer = appState.customers.find(c => c.id === customerId);
+
+            const invoice = {
+                id: 'inv_' + Date.now(),
+                invoiceNo: 'INV-' + Date.now().toString().slice(-4),
+                customerId: customerId,
+                customerName: customer.name,
+                date: document.getElementById('inv-date').value,
+                lines: currentInvoiceLines,
+                subtotal: subtotal,
+                tax: tax,
+                total: total,
+                status: 'Unpaid'
+            };
+
+            appState.invoices.push(invoice);
+            
+            // Update Customer Balance
+            customer.balance += total;
+            
+            // Update Inventory
+            currentInvoiceLines.forEach(line => {
+                const item = appState.items.find(i => i.id === line.itemId);
+                if (item && item.type === 'Product') {
+                    item.stock -= line.qty;
+                }
             });
-            if (saveData()) { renderVouchers(); closeModal('voucher-modal'); }
+
+            // Accounting Engine: Debit A/R, Credit Revenue, Credit Tax Payable
+            postJournalEntry(invoice.date, invoice.invoiceNo, 'Invoice to ' + customer.name, '1200', '3000', subtotal);
+            if (tax > 0) postJournalEntry(invoice.date, invoice.invoiceNo, 'Tax on Invoice', '1200', '2000', tax);
+
+            saveData();
+            renderInvoices();
+            closeModal('invoice-modal');
+            currentInvoiceLines = [];
         });
 
         // --- RENDER FUNCTIONS ---
 
-        function updateTopbar() {
-            if(appState.company) {
-                document.getElementById('sidebar-company-name').textContent = appState.company.name;
-                const currencySymbol = appState.company.currency === 'INR' ? '₹' : (appState.company.currency === 'USD' ? '$' : '€');
-                document.getElementById('topbar-company-info').textContent = `Currency: ${appState.company.currency} (${currencySymbol}) | FY: ${appState.company.fy}`;
-            }
+        function getCurrencySymbol() {
+            return appState.company.currency === 'INR' ? '₹' : (appState.company.currency === 'USD' ? '$' : '€');
         }
 
-        function updateDashboard() {
-            if (!appState.company) return;
+        function renderDashboard() {
+            const sym = getCurrencySymbol();
+            let receivables = 0, payables = 0, cash = 0, revenue = 0, expenses = 0;
             
-            let sales = 0, purchases = 0, expenses = 0;
-            const currencySymbol = appState.company.currency === 'INR' ? '₹' : (appState.company.currency === 'USD' ? '$' : '€');
-
-            appState.vouchers.forEach(v => {
-                if (v.type === 'Sale') sales += v.amount;
-                if (v.type === 'Purchase') purchases += v.amount;
-                if (v.type === 'Expense' || v.type === 'Payment') expenses += v.amount;
+            appState.accounts.forEach(a => {
+                if (a.name === 'Accounts Receivable') receivables = a.balance;
+                if (a.name === 'Accounts Payable') payables = a.balance;
+                if (a.name === 'Cash' || a.name === 'Bank') cash += a.balance;
+                if (a.name === 'Sales Revenue') revenue = a.balance;
+                if (a.name === 'Expenses') expenses = a.balance;
             });
 
-            const profit = sales - purchases - expenses;
-
-            document.getElementById('dash-sales').textContent = currencySymbol + sales.toFixed(2);
-            document.getElementById('dash-purchases').textContent = currencySymbol + purchases.toFixed(2);
-            document.getElementById('dash-expenses').textContent = currencySymbol + expenses.toFixed(2);
-            document.getElementById('dash-profit').textContent = currencySymbol + profit.toFixed(2);
+            document.getElementById('dash-receivables').textContent = sym + receivables.toFixed(2);
+            document.getElementById('dash-payables').textContent = sym + Math.abs(payables).toFixed(2);
+            document.getElementById('dash-cash').textContent = sym + cash.toFixed(2);
+            document.getElementById('dash-revenue').textContent = sym + revenue.toFixed(2);
+            document.getElementById('dash-expenses').textContent = sym + expenses.toFixed(2);
+            document.getElementById('dash-profit').textContent = sym + (revenue - expenses).toFixed(2);
 
             // Recent Transactions
-            const tbody = document.getElementById('dash-transactions-body');
-            const empty = document.getElementById('dash-transactions-empty');
+            const tbody = document.getElementById('dash-recent-tbody');
             tbody.innerHTML = '';
-            if (appState.vouchers.length === 0) {
-                empty.style.display = 'block';
-            } else {
-                empty.style.display = 'none';
-                // Show last 5
-                appState.vouchers.slice(-5).reverse().forEach(v => {
-                    tbody.innerHTML += `<tr>
-                        <td>${v.date}</td>
-                        <td><span style="font-weight:bold; color: ${v.type === 'Sale' ? 'var(--success)' : 'var(--danger)'}">${v.type}</span></td>
-                        <td>${v.party}</td>
-                        <td>${currencySymbol}${v.amount.toFixed(2)}</td>
-                    </tr>`;
-                });
-            }
-        }
-
-        function renderAccounts() {
-            const tbody = document.getElementById('accounts-body');
-            const empty = document.getElementById('accounts-empty');
-            tbody.innerHTML = '';
-            if (appState.accounts.length === 0) { empty.style.display = 'block'; return; }
-            empty.style.display = 'none';
-            appState.accounts.forEach(a => {
+            const allTrans = [...appState.invoices.map(i => ({...i, type: 'Invoice'})), ...appState.expenses.map(e => ({...e, type: 'Expense'}))];
+            allTrans.sort((a,b) => new Date(b.date) - new Date(a.date));
+            
+            allTrans.slice(0, 5).forEach(t => {
                 tbody.innerHTML += `<tr>
-                    <td><strong>${a.name}</strong></td>
-                    <td>${a.group}</td>
-                    <td>${a.balance >= 0 ? 'Dr' : 'Cr'}</td>
-                    <td>${Math.abs(a.balance).toFixed(2)}</td>
+                    <td>${t.date}</td>
+                    <td><span class="badge ${t.type === 'Invoice' ? 'badge-success' : 'badge-danger'}">${t.type}</span></td>
+                    <td>${t.invoiceNo || t.category}</td>
+                    <td>${sym}${t.total || t.amount}</td>
+                    <td>${t.status || 'Recorded'}</td>
                 </tr>`;
             });
         }
 
-        function renderParties() {
-            const tbody = document.getElementById('parties-body');
-            const empty = document.getElementById('parties-empty');
+        function renderCustomers() {
+            const tbody = document.getElementById('customers-tbody');
             tbody.innerHTML = '';
-            if (appState.parties.length === 0) { empty.style.display = 'block'; return; }
-            empty.style.display = 'none';
-            appState.parties.forEach(p => {
+            appState.customers.forEach(c => {
                 tbody.innerHTML += `<tr>
-                    <td><strong>${p.name}</strong></td>
-                    <td>${p.type}</td>
-                    <td>${p.gstin || '-'}</td>
-                    <td>${p.phone || '-'}</td>
+                    <td><strong>${c.name}</strong></td>
+                    <td>${c.email || '-'}</td>
+                    <td>${c.phone || '-'}</td>
+                    <td style="color: ${c.balance > 0 ? 'var(--danger)' : 'inherit'}; font-weight: bold;">${getCurrencySymbol()}${c.balance.toFixed(2)}</td>
+                    <td><button class="btn btn-secondary btn-sm">View</button></td>
+                </tr>`;
+            });
+        }
+
+        function renderSuppliers() {
+            const tbody = document.getElementById('suppliers-tbody');
+            tbody.innerHTML = '';
+            appState.suppliers.forEach(s => {
+                tbody.innerHTML += `<tr>
+                    <td><strong>${s.name}</strong></td>
+                    <td>${s.email || '-'}</td>
+                    <td>${s.phone || '-'}</td>
+                    <td style="color: ${s.balance > 0 ? 'var(--danger)' : 'inherit'}; font-weight: bold;">${getCurrencySymbol()}${s.balance.toFixed(2)}</td>
                 </tr>`;
             });
         }
 
         function renderItems() {
-            const tbody = document.getElementById('items-body');
-            const empty = document.getElementById('items-empty');
+            const tbody = document.getElementById('items-tbody');
             tbody.innerHTML = '';
-            if (appState.items.length === 0) { empty.style.display = 'block'; return; }
-            empty.style.display = 'none';
-            const currencySymbol = appState.company ? (appState.company.currency === 'INR' ? '₹' : (appState.company.currency === 'USD' ? '$' : '€')) : '₹';
             appState.items.forEach(i => {
                 tbody.innerHTML += `<tr>
                     <td><strong>${i.name}</strong></td>
                     <td>${i.sku || '-'}</td>
-                    <td>${i.hsn || '-'}</td>
-                    <td><span style="background:#e2e8f0; padding:4px 8px; border-radius:4px; font-size:12px;">${i.type}</span></td>
-                    <td>${currencySymbol}${i.price.toFixed(2)}</td>
+                    <td><span class="badge badge-info">${i.type}</span></td>
+                    <td>${getCurrencySymbol()}${i.price.toFixed(2)}</td>
+                    <td>${i.stock}</td>
                 </tr>`;
             });
         }
 
-        function renderVouchers() {
-            const tbody = document.getElementById('vouchers-body');
-            const empty = document.getElementById('vouchers-empty');
+        function renderInvoices() {
+            const tbody = document.getElementById('invoices-tbody');
             tbody.innerHTML = '';
-            if (appState.vouchers.length === 0) { empty.style.display = 'block'; return; }
-            empty.style.display = 'none';
-            const currencySymbol = appState.company ? (appState.company.currency === 'INR' ? '₹' : (appState.company.currency === 'USD' ? '$' : '€')) : '₹';
-            
-            // Sort by date descending
-            const sorted = [...appState.vouchers].sort((a,b) => new Date(b.date) - new Date(a.date));
-            sorted.forEach(v => {
+            appState.invoices.forEach(inv => {
                 tbody.innerHTML += `<tr>
-                    <td>${v.date}</td>
-                    <td>${v.type}</td>
-                    <td>${v.party}</td>
-                    <td>${currencySymbol}${v.amount.toFixed(2)}</td>
-                    <td>${v.narration || '-'}</td>
+                    <td><strong>${inv.invoiceNo}</strong></td>
+                    <td>${inv.customerName}</td>
+                    <td>${inv.date}</td>
+                    <td>${getCurrencySymbol()}${inv.total.toFixed(2)}</td>
+                    <td><span class="badge ${inv.status === 'Paid' ? 'badge-success' : 'badge-warning'}">${inv.status}</span></td>
+                    <td><button class="btn btn-secondary btn-sm" onclick="alert('Invoice Detail View - Coming Soon')">View</button></td>
                 </tr>`;
+            });
+        }
+
+        function renderExpenses() {
+            const tbody = document.getElementById('expenses-tbody');
+            tbody.innerHTML = '';
+            appState.expenses.forEach(exp => {
+                tbody.innerHTML += `<tr>
+                    <td>${exp.date}</td>
+                    <td><strong>${exp.category}</strong></td>
+                    <td>${exp.payee || '-'}</td>
+                    <td>${getCurrencySymbol()}${exp.amount.toFixed(2)}</td>
+                    <td>${exp.account}</td>
+                </tr>`;
+            });
+        }
+
+        function renderPayments() {
+            const tbody = document.getElementById('payments-tbody');
+            tbody.innerHTML = '';
+            appState.payments.forEach(pay => {
+                tbody.innerHTML += `<tr>
+                    <td>${pay.date}</td>
+                    <td><span class="badge ${pay.type === 'Customer Payment' ? 'badge-success' : 'badge-danger'}">${pay.type}</span></td>
+                    <td>${pay.reference || '-'}</td>
+                    <td>${getCurrencySymbol()}${pay.amount.toFixed(2)}</td>
+                    <td>${pay.account}</td>
+                </tr>`;
+            });
+        }
+
+        function renderAccounts() {
+            const tbody = document.getElementById('accounts-tbody');
+            tbody.innerHTML = '';
+            appState.accounts.forEach(acc => {
+                tbody.innerHTML += `<tr>
+                    <td>${acc.code}</td>
+                    <td><strong>${acc.name}</strong></td>
+                    <td><span class="badge badge-info">${acc.type}</span></td>
+                    <td style="font-weight: bold;">${getCurrencySymbol()}${acc.balance.toFixed(2)}</td>
+                </tr>`;
+            });
+        }
+
+        function renderJournal() {
+            const tbody = document.getElementById('journal-tbody');
+            tbody.innerHTML = '';
+            appState.journalEntries.slice().reverse().forEach(je => {
+                je.lines.forEach((line, index) => {
+                    tbody.innerHTML += `<tr>
+                        ${index === 0 ? `<td rowspan="${je.lines.length}">${je.date}</td><td rowspan="${je.lines.length}">${je.reference}</td><td rowspan="${je.lines.length}">${je.description}</td>` : ''}
+                        <td>${line.account}</td>
+                        <td>${line.type === 'Debit' ? getCurrencySymbol() + line.amount.toFixed(2) : '-'}</td>
+                        <td>${line.type === 'Credit' ? getCurrencySymbol() + line.amount.toFixed(2) : '-'}</td>
+                    </tr>`;
+                });
+                // Add a separator row
+                tbody.innerHTML += `<tr><td colspan="5" style="border-bottom: 2px solid var(--border); padding: 0;"></td></tr>`;
             });
         }
 
         function renderTrialBalance() {
-            const tbody = document.getElementById('tb-body');
+            const tbody = document.getElementById('tb-tbody');
             tbody.innerHTML = '';
-            const currencySymbol = appState.company ? (appState.company.currency === 'INR' ? '₹' : (appState.company.currency === 'USD' ? '$' : '€')) : '₹';
+            let totalDr = 0, totalCr = 0;
             
-            let totalDr = 0;
-            let totalCr = 0;
-
-            appState.accounts.forEach(a => {
-                const isDr = a.balance >= 0;
-                const amount = Math.abs(a.balance);
-                if(isDr) totalDr += amount; else totalCr += amount;
+            appState.accounts.forEach(acc => {
+                const isDr = acc.balance >= 0;
+                const amount = Math.abs(acc.balance);
+                if (isDr) totalDr += amount; else totalCr += amount;
                 
                 tbody.innerHTML += `<tr>
-                    <td>${a.name}</td>
-                    <td>${isDr ? currencySymbol + amount.toFixed(2) : '-'}</td>
-                    <td>${!isDr ? currencySymbol + amount.toFixed(2) : '-'}</td>
+                    <td>${acc.code} - ${acc.name}</td>
+                    <td>${isDr ? getCurrencySymbol() + amount.toFixed(2) : '-'}</td>
+                    <td>${!isDr ? getCurrencySymbol() + amount.toFixed(2) : '-'}</td>
                 </tr>`;
             });
-
-            tbody.innerHTML += `<tr style="font-weight:bold; background:#f8fafc;">
+            tbody.innerHTML += `<tr style="font-weight:bold; background:#f8fafc; border-top: 2px solid var(--border);">
                 <td>Total</td>
-                <td>${currencySymbol}${totalDr.toFixed(2)}</td>
-                <td>${currencySymbol}${totalCr.toFixed(2)}</td>
+                <td>${getCurrencySymbol()}${totalDr.toFixed(2)}</td>
+                <td>${getCurrencySymbol()}${totalCr.toFixed(2)}</td>
             </tr>`;
+        }
+
+        function renderPnL() {
+            const tbody = document.getElementById('pnl-tbody');
+            tbody.innerHTML = '';
+            let revenue = 0, expenses = 0;
+            
+            appState.accounts.forEach(a => {
+                if (a.type === 'Income') revenue += a.balance;
+                if (a.type === 'Expense') expenses += a.balance;
+            });
+
+            tbody.innerHTML += `<tr><td><strong>Revenue</strong></td><td></td></tr>`;
+            appState.accounts.filter(a => a.type === 'Income').forEach(a => {
+                tbody.innerHTML += `<tr><td style="padding-left: 30px;">${a.name}</td><td>${getCurrencySymbol()}${a.balance.toFixed(2)}</td></tr>`;
+            });
+            tbody.innerHTML += `<tr><td><strong>Total Revenue</strong></td><td><strong>${getCurrencySymbol()}${revenue.toFixed(2)}</strong></td></tr>`;
+            
+            tbody.innerHTML += `<tr><td><strong>Expenses</strong></td><td></td></tr>`;
+            appState.accounts.filter(a => a.type === 'Expense').forEach(a => {
+                tbody.innerHTML += `<tr><td style="padding-left: 30px;">${a.name}</td><td>${getCurrencySymbol()}${a.balance.toFixed(2)}</td></tr>`;
+            });
+            tbody.innerHTML += `<tr><td><strong>Total Expenses</strong></td><td><strong>${getCurrencySymbol()}${expenses.toFixed(2)}</strong></td></tr>`;
+            
+            const profit = revenue - expenses;
+            tbody.innerHTML += `<tr style="font-weight:bold; background:#f8fafc; border-top: 2px solid var(--border); font-size: 16px;">
+                <td>Net Profit</td>
+                <td style="color: ${profit >= 0 ? 'var(--success)' : 'var(--danger)'}">${getCurrencySymbol()}${profit.toFixed(2)}</td>
+            </tr>`;
+        }
+
+        function renderBalanceSheet() {
+            const tbody = document.getElementById('bs-tbody');
+            tbody.innerHTML = '';
+            let assets = 0, liabilities = 0, equity = 0;
+            
+            appState.accounts.forEach(a => {
+                if (a.type === 'Asset') assets += a.balance;
+                if (a.type === 'Liability') liabilities += a.balance;
+                if (a.type === 'Equity') equity += a.balance;
+            });
+
+            // In a real system, Net Profit would be added to Equity. 
+            // For this prototype, we'll show it as a balancing figure.
+            let revenue = 0, expenses = 0;
+            appState.accounts.forEach(a => {
+                if (a.type === 'Income') revenue += a.balance;
+                if (a.type === 'Expense') expenses += a.balance;
+            });
+            const netProfit = revenue - expenses;
+
+            tbody.innerHTML += `<tr><td><strong>ASSETS</strong></td><td></td></tr>`;
+            appState.accounts.filter(a => a.type === 'Asset').forEach(a => {
+                tbody.innerHTML += `<tr><td style="padding-left: 30px;">${a.name}</td><td>${getCurrencySymbol()}${a.balance.toFixed(2)}</td></tr>`;
+            });
+            tbody.innerHTML += `<tr style="font-weight:bold;"><td>Total Assets</td><td>${getCurrencySymbol()}${assets.toFixed(2)}</td></tr>`;
+            
+            tbody.innerHTML += `<tr><td colspan="2" style="height: 20px;"></td></tr>`;
+            
+            tbody.innerHTML += `<tr><td><strong>LIABILITIES & EQUITY</strong></td><td></td></tr>`;
+            appState.accounts.filter(a => a.type === 'Liability').forEach(a => {
+                tbody.innerHTML += `<tr><td style="padding-left: 30px;">${a.name}</td><td>${getCurrencySymbol()}${Math.abs(a.balance).toFixed(2)}</td></tr>`;
+            });
+            tbody.innerHTML += `<tr><td style="padding-left: 30px;">Net Profit (Current Period)</td><td>${getCurrencySymbol()}${netProfit.toFixed(2)}</td></tr>`;
+            tbody.innerHTML += `<tr style="font-weight:bold;"><td>Total Liabilities & Equity</td><td>${getCurrencySymbol()}${(Math.abs(liabilities) + netProfit).toFixed(2)}</td></tr>`;
         }
 
         // --- BOOTSTRAP ---
         window.onload = function() {
             loadData();
-            if (appState.company) {
-                updateTopbar();
-                showView('dashboard-view');
-            } else {
-                showView('setup-view');
-            }
+            showView('dashboard-view');
         };
+
     </script>
 </body>
 </html>
