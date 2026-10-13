@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard · LedgerPro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   LEDGERPRO — DASHBOARD (self-contained)
+   ============================================================ */
+
+:root{
+  --bg: #f4f6f9;
+  --surface: #ffffff;
+  --subtle: #f8fafc;
+  --hover: #f1f5f9;
+  --border: #e2e8f0;
+  --border-2: #cbd5e1;
+  --text-1: #0f172a;
+  --text-2: #334155;
+  --text-3: #64748b;
+  --text-4: #94a3b8;
+  --primary: #1e40af;
+  --primary-2: #2563eb;
+  --primary-soft: #eff6ff;
+  --success: #16a34a;
+  --success-soft: #f0fdf4;
+  --danger: #dc2626;
+  --danger-soft: #fef2f2;
+  --warning: #d97706;
+  --warning-soft: #fffbeb;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-1);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+button{font-family:inherit;font-size:inherit;cursor:pointer}
+a{text-decoration:none;color:inherit}
+input{font-family:inherit}
+
+/* ============================================================
+   APP SHELL
+   ============================================================ */
+.app{
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+.sidebar{
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sb-brand{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 20px 18px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+.sb-brand-mark{
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.sb-brand-name{font-weight: 800; font-size: 15px; letter-spacing: -0.2px}
+
+.sb-nav{flex:1; padding: 0 8px}
+
+.sb-section{
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+  color: var(--text-4);
+  text-transform: uppercase;
+  padding: 14px 12px 6px;
+}
+
+.sb-link{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  color: var(--text-2);
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 1px;
+  transition: all .12s ease;
+}
+.sb-link:hover{background: var(--hover); color: var(--text-1)}
+.sb-link.active{
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-weight: 600;
+}
+.sb-link .icon{
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   MAIN AREA
+   ============================================================ */
+.main{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Topbar */
+.topbar{
+  height: 60px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  gap: 16px;
+}
+
+.tb-left{display:flex; align-items:center; gap:14px; min-width:0}
+
+.tb-menu{
+  display: none;
+  background: none;
+  border: none;
+  padding: 8px;
+  color: var(--text-2);
+}
+.tb-menu svg{width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round}
+
+.tb-company{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.tb-avatar{
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+.tb-info{min-width:0}
+.tb-name{font-size: 14px; font-weight: 700; color: var(--text-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 260px}
+.tb-meta{font-size: 11px; color: var(--text-3); margin-top: 1px}
+
+.tb-right{display:flex; align-items:center; gap:12px}
+
+.tb-date{
+  font-size: 12px;
+  color: var(--text-3);
+  padding: 6px 12px;
+  background: var(--subtle);
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  font-family: var(--mono);
+}
+
+.tb-switch{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  transition: all .12s ease;
+}
+.tb-switch:hover{background: var(--hover); color: var(--text-1)}
+.tb-switch svg{width:14px; height:14px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round}
+
+/* Page */
+.page{
+  flex: 1;
+  padding: 28px 28px 48px;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.page-header{margin-bottom: 24px}
+.page-title{font-size: 24px; font-weight: 800; letter-spacing: -0.4px; color: var(--text-1)}
+.page-sub{font-size: 14px; color: var(--text-3); margin-top: 4px}
+
+/* ============================================================
+   KPI CARDS
+   ============================================================ */
+.kpi-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.kpi{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all .15s ease;
+  position: relative;
+  overflow: hidden;
+}
+.kpi:hover{
+  border-color: var(--border-2);
+  box-shadow: 0 4px 16px rgba(15,23,42,0.06);
+  transform: translateY(-1px);
+}
+.kpi-top{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.kpi-label{
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+.kpi-icon{
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.kpi-icon svg{
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.kpi-icon.blue   { background: #dbeafe; }
+.kpi-icon.blue svg{ stroke: #1e40af; }
+.kpi-icon.red    { background: #fee2e2; }
+.kpi-icon.red svg{ stroke: #b91c1c; }
+.kpi-icon.green  { background: #dcfce7; }
+.kpi-icon.green svg{ stroke: #15803d; }
+.kpi-icon.amber  { background: #fef3c7; }
+.kpi-icon.amber svg{ stroke: #b45309; }
+.kpi-icon.purple { background: #e9d5ff; }
+.kpi-icon.purple svg{ stroke: #6b21a8; }
+.kpi-icon.teal   { background: #ccfbf1; }
+.kpi-icon.teal svg{ stroke: #0f766e; }
+
+.kpi-value{
+  font-family: var(--mono);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--text-1);
+  line-height: 1.1;
+}
+.kpi-value.positive{ color: var(--success); }
+.kpi-value.negative{ color: var(--danger); }
+
+.kpi-meta{
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--text-3);
+  margin-top: 8px;
+}
+.kpi-meta .dot{
+  width: 4px; height: 4px;
+  background: var(--text-4);
+  border-radius: 50%;
+}
+
+/* ============================================================
+   CHART ROW
+   ============================================================ */
+.chart-row{
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.chart-card{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+.chart-head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+.chart-title{font-size: 14px; font-weight: 700; color: var(--text-1)}
+.chart-sub{font-size: 12px; color: var(--text-3); margin-top: 2px}
+
+.chart-empty{
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--text-4);
+  font-size: 13px;
+  background: var(--subtle);
+  border-radius: 8px;
+  border: 1px dashed var(--border-2);
+}
+.chart-empty svg{
+  width: 32px;
+  height: 32px;
+  stroke: var(--text-4);
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ============================================================
+   QUICK ACTIONS
+   ============================================================ */
+.qa-card{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+.qa-head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.qa-title{font-size: 14px; font-weight: 700; color: var(--text-1)}
+
+.qa-grid{
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+.qa-btn{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 18px 8px;
+  background: var(--subtle);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: all .15s ease;
+  text-align: center;
+}
+.qa-btn:hover{
+  background: var(--primary-soft);
+  border-color: var(--primary-2);
+  transform: translateY(-2px);
+}
+.qa-btn:hover .qa-icon{
+  background: var(--primary-2);
+  color: #fff;
+}
+.qa-icon{
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .15s ease;
+  border: 1px solid var(--border);
+}
+.qa-icon svg{
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.qa-label{
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  line-height: 1.3;
+}
+
+/* ============================================================
+   ACTIVITY / EMPTY STATE
+   ============================================================ */
+.section-card{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+.section-head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.section-title{font-size: 14px; font-weight: 700; color: var(--text-1)}
+
+.empty-activity{
+  padding: 48px 20px;
+  text-align: center;
+  color: var(--text-3);
+}
+.empty-activity svg{
+  width: 44px;
+  height: 44px;
+  stroke: var(--text-4);
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  margin-bottom: 14px;
+}
+.empty-activity h4{
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-2);
+  margin-bottom: 6px;
+}
+.empty-activity p{
+  font-size: 13px;
+  color: var(--text-3);
+  max-width: 360px;
+  margin: 0 auto 18px;
+  line-height: 1.5;
+}
+
+.btn-primary{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all .15s ease;
+}
+.btn-primary:hover{
+  background: var(--primary-2);
+  box-shadow: 0 4px 12px rgba(37,99,235,0.28);
+}
+.btn-primary svg{
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ============================================================
+   SIDEBAR BACKDROP (mobile)
+   ============================================================ */
+.sb-backdrop{
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,0.5);
+  z-index: 98;
+}
+.sb-backdrop.show{display:block}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1100px){
+  .kpi-grid{grid-template-columns: repeat(3, 1fr)}
+  .chart-row{grid-template-columns: 1fr}
+  .qa-grid{grid-template-columns: repeat(3, 1fr)}
+}
+
+@media (max-width: 900px){
+  .app{grid-template-columns: 1fr}
+  .sidebar{
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 240px;
+    z-index: 99;
+    transition: left .25s ease;
+    box-shadow: 0 12px 32px rgba(15,23,42,0.15);
+  }
+  .sidebar.open{left: 0}
+  .tb-menu{display: block}
+  .page{padding: 20px 16px 40px}
+  .topbar{padding: 0 16px}
+  .tb-date{display: none}
+  .tb-name{max-width: 140px; font-size: 13px}
+}
+
+@media (max-width: 640px){
+  .kpi-grid{grid-template-columns: 1fr}
+  .qa-grid{grid-template-columns: repeat(2, 1fr)}
+  .page-title{font-size: 20px}
+  .kpi-value{font-size: 20px}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ══════════ SIDEBAR ══════════ -->
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sb-brand">
+      <div class="sb-brand-mark">L</div>
+      <div class="sb-brand-name">LedgerPro</div>
+    </div>
+
+    <nav class="sb-nav">
+
+      <div class="sb-section">Main</div>
+      <a class="sb-link active" href="dashboard.html">
+        <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+        Dashboard
+      </a>
+
+      <div class="sb-section">Sales</div>
+      <a class="sb-link" href="customers.html">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Customers
+      </a>
+      <a class="sb-link" href="items.html">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>
+        Items
+      </a>
+      <a class="sb-link" href="invoices.html">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Invoices
+      </a>
+      <a class="sb-link" href="payments.html">
+        <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M2 10h20"/></svg>
+        Payments
+      </a>
+
+      <div class="sb-section">Purchases</div>
+      <a class="sb-link" href="suppliers.html">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Suppliers
+      </a>
+      <a class="sb-link" href="expenses.html">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Expenses
+      </a>
+      <a class="sb-link" href="bills.html">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Bills
+      </a>
+
+      <div class="sb-section">Accounting</div>
+      <a class="sb-link" href="chart-of-accounts.html">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg>
+        Chart of Accounts
+      </a>
+      <a class="sb-link" href="journal-entries.html">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Journal Entries
+      </a>
+      <a class="sb-link" href="reports.html">
+        <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+        Reports
+      </a>
+
+      <div class="sb-section">Banking</div>
+      <a class="sb-link" href="banking.html">
+        <svg class="icon" viewBox="0 0 24 24"><line x1="3" y1="21" x2="21" y2="21"/><line x1="5" y1="21" x2="5" y2="10"/><line x1="9" y1="21" x2="9" y2="10"/><line x1="13" y1="21" x2="13" y2="10"/><line x1="17" y1="21" x2="17" y2="10"/><path d="M2 10L12 3l10 7"/></svg>
+        Banking
+      </a>
+
+      <div class="sb-section">Settings</div>
+      <a class="sb-link" href="settings.html">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </a>
+
+    </nav>
+
+  </aside>
+
+  <div class="sb-backdrop" id="sbBackdrop"></div>
+
+  <!-- ══════════ MAIN ══════════ -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="tb-left">
+        <button class="tb-menu" id="tbMenu" aria-label="Menu">
+          <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="tb-company">
+          <div class="tb-avatar" id="companyAvatar">?</div>
+          <div class="tb-info">
+            <div class="tb-name" id="companyName">Loading…</div>
+            <div class="tb-meta" id="companyMeta">—</div>
+          </div>
+        </div>
+      </div>
+      <div class="tb-right">
+        <div class="tb-date" id="todayDate">—</div>
+        <button class="tb-switch" id="switchBtn">
+          <svg viewBox="0 0 24 24"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+          Switch
+        </button>
+      </div>
+    </header>
+
+    <!-- Page -->
+    <div class="page">
+
+      <div class="page-header">
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-sub">Overview of your business performance</p>
+      </div>
+
+      <!-- 6 KPI cards -->
+      <div class="kpi-grid">
+
+        <div class="kpi" data-link="invoices.html">
+          <div class="kpi-top">
+            <span class="kpi-label">Total Receivables</span>
+            <div class="kpi-icon green">
+              <svg viewBox="0 0 24 24"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value" id="kpiReceivables">₹0.00</div>
+          <div class="kpi-meta"><span>Money customers owe you</span></div>
+        </div>
+
+        <div class="kpi" data-link="bills.html">
+          <div class="kpi-top">
+            <span class="kpi-label">Total Payables</span>
+            <div class="kpi-icon red">
+              <svg viewBox="0 0 24 24"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value" id="kpiPayables">₹0.00</div>
+          <div class="kpi-meta"><span>Money you owe suppliers</span></div>
+        </div>
+
+        <div class="kpi" data-link="banking.html">
+          <div class="kpi-top">
+            <span class="kpi-label">Cash &amp; Bank</span>
+            <div class="kpi-icon blue">
+              <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M2 10h20"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value" id="kpiCash">₹0.00</div>
+          <div class="kpi-meta"><span>Available balances</span></div>
+        </div>
+
+        <div class="kpi" data-link="reports.html">
+          <div class="kpi-top">
+            <span class="kpi-label">Revenue</span>
+            <div class="kpi-icon teal">
+              <svg viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value" id="kpiRevenue">₹0.00</div>
+          <div class="kpi-meta"><span>This financial year</span></div>
+        </div>
+
+        <div class="kpi" data-link="expenses.html">
+          <div class="kpi-top">
+            <span class="kpi-label">Expenses</span>
+            <div class="kpi-icon amber">
+              <svg viewBox="0 0 24 24"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value" id="kpiExpenses">₹0.00</div>
+          <div class="kpi-meta"><span>This financial year</span></div>
+        </div>
+
+        <div class="kpi" data-link="reports.html">
+          <div class="kpi-top">
+            <span class="kpi-label">Net Profit</span>
+            <div class="kpi-icon purple">
+              <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value" id="kpiProfit">₹0.00</div>
+          <div class="kpi-meta"><span>Revenue − Expenses</span></div>
+        </div>
+
+      </div>
+
+      <!-- Charts -->
+      <div class="chart-row">
+
+        <div class="chart-card">
+          <div class="chart-head">
+            <div>
+              <div class="chart-title">Revenue vs Expenses</div>
+              <div class="chart-sub">Monthly trend for current financial year</div>
+            </div>
+          </div>
+          <div class="chart-empty">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+            <div>No data yet — create your first invoice to see charts</div>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-head">
+            <div>
+              <div class="chart-title">Expense Breakdown</div>
+              <div class="chart-sub">By category</div>
+            </div>
+          </div>
+          <div class="chart-empty">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2v10l7 5"/></svg>
+            <div>No expenses recorded yet</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="qa-card">
+        <div class="qa-head">
+          <div class="qa-title">Quick Actions</div>
+        </div>
+        <div class="qa-grid">
+
+          <a class="qa-btn" href="invoice-create.html">
+            <div class="qa-icon">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+            </div>
+            <div class="qa-label">New Invoice</div>
+          </a>
+
+          <a class="qa-btn" href="expenses.html">
+            <div class="qa-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            </div>
+            <div class="qa-label">Record Expense</div>
+          </a>
+
+          <a class="qa-btn" href="customers.html">
+            <div class="qa-icon">
+              <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            </div>
+            <div class="qa-label">Add Customer</div>
+          </a>
+
+          <a class="qa-btn" href="suppliers.html">
+            <div class="qa-icon">
+              <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <div class="qa-label">Add Supplier</div>
+          </a>
+
+          <a class="qa-btn" href="payments.html">
+            <div class="qa-icon">
+              <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M2 10h20"/></svg>
+            </div>
+            <div class="qa-label">Record Payment</div>
+          </a>
+
+          <a class="qa-btn" href="items.html">
+            <div class="qa-icon">
+              <svg viewBox="0 0 24 24"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>
+            </div>
+            <div class="qa-label">Add Item</div>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="section-card">
+        <div class="section-head">
+          <div class="section-title">Recent Activity</div>
+        </div>
+        <div class="empty-activity">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <h4>No activity yet</h4>
+          <p>Once you create invoices, record expenses, or receive payments, they'll show up here.</p>
+          <a class="btn-primary" href="invoice-create.html">
+            Create your first invoice
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   IndexedDB
+   ============================================================ */
+const DB_NAME = 'ledgerpro';
+const DB_VERSION = 1;
+const STORE = 'companies';
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onerror = () => reject(req.error);
+    req.onsuccess = () => resolve(req.result);
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE)) {
+        const store = db.createObjectStore(STORE, {
+          keyPath: 'id', autoIncrement: true
+        });
+        store.createIndex('name', 'name', { unique: false });
+      }
+    };
+  });
+}
+
+async function getCompany(id) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE, 'readonly');
+    const req = tx.objectStore(STORE).get(id);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+/* ============================================================
+   Helpers
+   ============================================================ */
+function formatINR(n) {
+  n = Number(n) || 0;
+  return '₹' + n.toLocaleString('en-IN', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[ch]));
+}
+
+/* ============================================================
+   Boot
+   ============================================================ */
+async function init() {
+  const id = localStorage.getItem('ledgerpro.activeCompanyId');
+  if (!id) {
+    window.location.href = 'index.html';
+    return;
+  }
+
+  try {
+    const company = await getCompany(Number(id));
+    if (!company) {
+      localStorage.removeItem('ledgerpro.activeCompanyId');
+      window.location.href = 'index.html';
+      return;
+    }
+    renderCompany(company);
+  } catch (e) {
+    console.error('Load failed:', e);
+    window.location.href = 'index.html';
+  }
+
+  // Today's date
+  const d = new Date();
+  const opts = { day: '2-digit', month: 'short', year: 'numeric' };
+  document.getElementById('todayDate').textContent =
+    d.toLocaleDateString('en-IN', opts);
+
+  // Sidebar toggle (mobile)
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sbBackdrop');
+  document.getElementById('tbMenu').addEventListener('click', () => {
+    sidebar.classList.add('open');
+    backdrop.classList.add('show');
+  });
+  backdrop.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('show');
+  });
+
+  // Switch company
+  document.getElementById('switchBtn').addEventListener('click', () => {
+    localStorage.removeItem('ledgerpro.activeCompanyId');
+    window.location.href = 'index.html';
+  });
+
+  // KPI clicks
+  document.querySelectorAll('.kpi').forEach(el => {
+    el.addEventListener('click', () => {
+      const link = el.getAttribute('data-link');
+      if (link) window.location.href = link;
+    });
+  });
+}
+
+function renderCompany(c) {
+  const initial = (c.name || '?').trim().charAt(0).toUpperCase();
+  document.getElementById('companyAvatar').textContent = initial;
+  document.getElementById('companyName').textContent = c.name || 'Company';
+
+  const parts = [c.currency || 'INR', 'FY ' + (c.financialYear || '—')];
+  if (c.gstin) parts.push('GSTIN: ' + c.gstin);
+  document.getElementById('companyMeta').textContent = parts.join(' · ');
+
+  // Update KPI values (all zero for now — no transactions yet)
+  const zero = formatINR(0);
+  document.getElementById('kpiReceivables').textContent = zero;
+  document.getElementById('kpiPayables').textContent = zero;
+  document.getElementById('kpiCash').textContent = zero;
+  document.getElementById('kpiRevenue').textContent = zero;
+  document.getElementById('kpiExpenses').textContent = zero;
+  document.getElementById('kpiProfit').textContent = zero;
+}
+
+init();
+</script>
+
+</body>
+</html>
